@@ -18,6 +18,7 @@
 2. Begränsad svarstid
 1. spotify / youtube för musikfrågor
 2. stöd för videofrågor
+2. olika frågetyper
 2. utrymme för spelarna att ta paus
 2. finalrunda där allt kan vända
 2. streama en resultatskärm med cromecast
