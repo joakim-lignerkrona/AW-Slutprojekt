@@ -1,9 +1,9 @@
-##Idéer
-Hjälpkö
-Marketplace
-Djurdejting app / playdate
-Quizz app
+## Idéer  
+- Hjälpkö.  
+- Marketplace. 
+- Djurdejting app / playdate.  
+- Quizz app.  
 
 
-Önskemål om tekniker
- -Blazor
+Önskemål om tekniker:  
+  - Blazor
