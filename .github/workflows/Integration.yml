@@ -22,3 +22,8 @@ jobs:
         
       - name: Publish
         run: dotnet publsh -c Release -o /var/www/slutprojekt
+      - name: Restart the app
+        run: |
+          export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          systemctl --user restart sample-app.service
+
