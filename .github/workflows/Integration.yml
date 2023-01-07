@@ -21,7 +21,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
         
       - name: Publish
-        run: dotnet publsh -c Release -o /var/www/slutprojekt
+        run: dotnet publish -c Release -o /var/www/slutprojekt
       - name: Restart the app
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
