@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriviaRoyale.Server", "TriviaRoyale\Server\TriviaRoyale.Server.csproj", "{78A9745A-B409-46B4-B6E1-55757A77F284}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TriviaRoyale.Server", "TriviaRoyale\Server\TriviaRoyale.Server.csproj", "{78A9745A-B409-46B4-B6E1-55757A77F284}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriviaRoyale.Client", "TriviaRoyale\Client\TriviaRoyale.Client.csproj", "{1E85DD01-FC0C-442B-AD11-0A7BB36ED6CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TriviaRoyale.Client", "TriviaRoyale\Client\TriviaRoyale.Client.csproj", "{1E85DD01-FC0C-442B-AD11-0A7BB36ED6CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriviaRoyale.Shared", "TriviaRoyale\Shared\TriviaRoyale.Shared.csproj", "{E9D25C52-6031-4D04-B424-7D2E44EA4D3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TriviaRoyale.Shared", "TriviaRoyale\Shared\TriviaRoyale.Shared.csproj", "{E9D25C52-6031-4D04-B424-7D2E44EA4D3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
