@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using TriviaRoyale;
+using TriviaRoyale.Client;
 
-namespace TriviaRoyale
+namespace TriviaRoyale.Client
 {
     public class Program
     {
