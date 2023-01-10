@@ -2,12 +2,10 @@
 
 ## Must Haves:
 - visa frågor
-- logga in
 - stöd för liveuppdateringar
 - hosted Spelledaren ser frågorna
 - spelarna kan svara på den egna enheten
 - UI språk engelska
-- skapa frågor
 - poängsystem
 - Spelaren kan begära att svara genom att trycka på knappen
 - Spelledaren får en lista på vem som var först
@@ -27,3 +25,5 @@
 2. stöd för flera språk
 3. olika utmärkelser, bra och dåliga. ex Rundans galning som alltid trycker först och alltid har fel.
 4. Transitions
+5. logga in
+6. skapa frågor
