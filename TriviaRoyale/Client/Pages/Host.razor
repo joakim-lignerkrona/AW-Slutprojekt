@@ -1,0 +1,14 @@
+﻿@page "/Host/{name}"
+
+<h3>Waiting for host to start</h3>
+
+<p>Players in the lobby:</p>
+<p>@Name</p>
+
+@code {
+    [Parameter] public string Name { get; set; }
+    protected override void OnInitialized()
+    {
+        // You can use the name here as well
+    }
+}
