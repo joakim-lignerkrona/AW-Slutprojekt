@@ -11,7 +11,7 @@ namespace TriviaRoyale.Server.Hubs
 
         public override Task OnConnectedAsync()
         {
-
+            Console.WriteLine("User connected");
 
             return base.OnConnectedAsync();
         }
