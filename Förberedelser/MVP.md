@@ -26,3 +26,4 @@
 2. möjlighet till offline spelande
 2. stöd för flera språk
 3. olika utmärkelser, bra och dåliga. ex Rundans galning som alltid trycker först och alltid har fel.
+4. Transitions
