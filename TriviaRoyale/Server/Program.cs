@@ -14,7 +14,11 @@ namespace TriviaRoyale
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-            builder.Services.AddTransient<QRService>();
+
+          builder.Services.AddTransient<QRService>();
+
+            builder.Services.AddSingleton<DataService>();
+
 
             builder.Services.AddSignalR();
             builder.Services.AddResponseCompression(opts =>
@@ -23,6 +27,7 @@ namespace TriviaRoyale
                     new[] { "application/octet-stream" });
             });
 
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
@@ -32,6 +37,8 @@ namespace TriviaRoyale
             if(app.Environment.IsDevelopment())
             {
                 app.UseWebAssemblyDebugging();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
             else
             {
@@ -39,6 +46,11 @@ namespace TriviaRoyale
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 
