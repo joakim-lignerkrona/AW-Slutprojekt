@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client;
+@using TriviaRoyale.Client.Shared.Host.JoinScreen
+@inject NavigationManager Navigation
 
 
 
@@ -9,12 +12,17 @@
 <h3>Test</h3>
 <PlayerJoinScreen />
 
+<div>
+    @foreach(var msg in messages)
+    {
+        <p>@msg</p>
+    }
+</div>
+
 
 
 @code {
- 
     
-    
-
+   
     
 }

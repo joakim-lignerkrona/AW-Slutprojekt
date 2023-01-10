@@ -1,0 +1,38 @@
+﻿@using System.Web;
+<h3>PlayerJoinScreen</h3>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="d-flex justify-content-between">
+            <div id="QR-output">
+                <img src="/qr/@encodedUrl" alt="" />
+            </div>
+            <div id="player-list" class="border-2 flex-grow-1">
+                <ul>
+                    <li>Player 1</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-secondary p-5" @onclick="StartGame">
+                <span class="h1">
+                    Start Game
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    string encodedUrl;
+    void StartGame()
+    {
+        System.Console.WriteLine("Start Game");
+    }
+    protected override void OnInitialized()
+    {
+        encodedUrl = HttpUtility.UrlEncode("https://google.com");
+    }
+}

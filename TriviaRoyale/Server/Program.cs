@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using TriviaRoyale.Server.Hubs;
+using TriviaRoyale.Server.Models;
 
 namespace TriviaRoyale
 {
@@ -13,6 +14,7 @@ namespace TriviaRoyale
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+            builder.Services.AddTransient<QRService>();
 
             builder.Services.AddSignalR();
             builder.Services.AddResponseCompression(opts =>

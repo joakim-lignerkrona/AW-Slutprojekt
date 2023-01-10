@@ -7,5 +7,7 @@ namespace TriviaRoyale.Client.Models
         public string RoomID { get; set; }
         public List<Player> Players { get; set; }
 
+
+
     }
 }
