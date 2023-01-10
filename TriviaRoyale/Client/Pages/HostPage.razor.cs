@@ -6,8 +6,6 @@ namespace TriviaRoyale.Client.Pages
     {
         private HubConnection? hubConnection;
         private List<string> messages = new List<string>();
-        private string? userInput;
-        private string? messageInput;
 
         protected override async Task OnInitializedAsync()
         {
@@ -23,14 +21,6 @@ namespace TriviaRoyale.Client.Pages
             });
 
             await hubConnection.StartAsync();
-        }
-
-        private async Task Send()
-        {
-            if(hubConnection is not null)
-            {
-                await hubConnection.SendAsync("SendMessage", userInput, messageInput);
-            }
         }
 
         public bool IsConnected =>
