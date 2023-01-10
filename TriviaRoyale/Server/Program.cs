@@ -14,7 +14,11 @@ namespace TriviaRoyale
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+
+          builder.Services.AddTransient<QRService>();
+
             builder.Services.AddSingleton<DataService>();
+
 
             builder.Services.AddSignalR();
             builder.Services.AddResponseCompression(opts =>
