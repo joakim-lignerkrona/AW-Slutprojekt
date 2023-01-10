@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using TriviaRoyale.Server.Controllers;
 using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Server.Models
@@ -11,15 +10,27 @@ namespace TriviaRoyale.Server.Models
         //ListOfQAndA i framtiden..
         //ListOfQAndA = questionController.GetList();
 
-        public bool Correct { get; set; }
-        private readonly QuestionControllerAPI questionController;
+        List<Question> questions;
 
-        public string GetQuestion()
+        public DataService()
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, @"JsonData\disney.json");
+            string jsonString = File.ReadAllText(path);
+            Questions listOfQuestions = JsonSerializer.Deserialize<Questions>(jsonString)!;
+            this.questions = new List<Question>(listOfQuestions.questions);
+        }
+
+        public Question[] GetQuestions()
+        {
+
+            return questions.ToArray();
+        }
+        public Question GetQuestion()
         {
             Random random = new Random();
-            int r = random.Next(1, questionController.GetList().Count);
+            int r = random.Next(1, questions.Count);
             return GetRandomQuestion(r);
         }
-        private string GetRandomQuestion(int r) => questionController.GetList()[r].Question;
+        private Question GetRandomQuestion(int r) => questions[r];
     }
 }

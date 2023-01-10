@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using TriviaRoyale.Server.Models;
+using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Server.Controllers
 {
@@ -26,22 +25,19 @@ namespace TriviaRoyale.Server.Controllers
         private readonly IConfiguration configuration;
 
         //DI
-        public QuestionControllerAPI(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public QuestionControllerAPI(DataService service, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
+            this.service = service;
             this.webHostEnvironment = webHostEnvironment;
             this.configuration = configuration;
         }
 
         //CLIENT SIDE
         [HttpGet]
-        public List<QandA> GetList()
+        public Question[] GetList()
         {
-            List<QandA> list = new List<QandA>();
-            using (StreamReader reader = new StreamReader($"{webHostEnvironment.ContentRootPath}/jsondata/disney.json"))
-            {
-                list = JsonConvert.DeserializeObject<List<QandA>>(reader.ReadToEnd());
-            }
-            return list;
+
+            return service.GetQuestions();
         }
 
 

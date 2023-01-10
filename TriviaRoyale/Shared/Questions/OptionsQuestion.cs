@@ -2,6 +2,6 @@
 {
     internal class OptionsQuestion : Question
     {
-        public List<string> Options { get; set; }
+        public List<string> options { get; set; }
     }
 }
