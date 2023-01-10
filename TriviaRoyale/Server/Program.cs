@@ -15,7 +15,7 @@ namespace TriviaRoyale
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
-          builder.Services.AddTransient<QRService>();
+            builder.Services.AddTransient<QRService>();
 
             builder.Services.AddSingleton<DataService>();
 
@@ -48,8 +48,8 @@ namespace TriviaRoyale
             }
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("/v1/swagger.json", "v1");
+                options.RoutePrefix = "/swagger";
             });
 
             app.UseHttpsRedirection();
