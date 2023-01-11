@@ -1,19 +1,75 @@
 ﻿@page "/"
-
-
-
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavManager
+@implements IAsyncDisposable
 
 
 <PageTitle>Trivia Royale</PageTitle>
 
 <h1>Welcome!</h1>
 
-<p> Soon We're launching the Trivia Royale app that takes the TV-quiz game show to your livingroom.</p>
+<div class="container">
+    <div class="form-group">
+        <label>
+            User: <input @bind="userName" />
+        </label>
+    </div>
+
+    <button @onclick="AddPlayer" disabled="@(IsConnected == false)">Add Player</button>
+</div>
+
+<hr />
+
+<ul>
+    @foreach (var item in connectedPlayers)
+    {
+        <li>@item</li>
+    }
+</ul>
 
 @code {
-    string qrCodeAsAsciiArt = "";
-    
-    
+    private HubConnection? hubConnection;
 
-    
+    private string? userName;
+    List<string> connectedPlayers = new();
+    private string roomName;
+
+    string qrCodeAsAsciiArt = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavManager.ToAbsoluteUri("/Quiz"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        //capture message from server
+        hubConnection.On<string>("ReceiveAnswer", user =>
+        {
+            connectedPlayers.Add(user);
+            InvokeAsync(StateHasChanged); //telling Blazor to check for new values
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task AddPlayer()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendAnswer", userName);
+        }
+    }
+
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
 }
