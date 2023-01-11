@@ -16,7 +16,8 @@ jobs:
         with:
           dotnet-version: ${{matrix.dotnet-version}}
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore ./Client/TriviaRoyale.Client.csproj
+      - run: dotnet restore ./Client/TriviaRoyale.Server.csproj
       - name: Build
         run: dotnet build --configuration Release --no-restore
         
