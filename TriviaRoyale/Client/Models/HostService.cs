@@ -31,6 +31,10 @@ namespace TriviaRoyale.Client.Models
             await hubConnection.StartAsync();
             NotifyStateChanged();
         }
+        public void StartGame()
+        {
+            hubConnection.SendAsync("StartGame");
+        }
 
         public bool IsConnected =>
             hubConnection?.State == HubConnectionState.Connected;
