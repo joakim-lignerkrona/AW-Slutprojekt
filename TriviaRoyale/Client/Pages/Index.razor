@@ -11,17 +11,35 @@
 <div class="container">
     <div class="form-group">
         <label>
-            User: <input @bind="userName" />
+            Global Message: <input @bind="message" />
         </label>
     </div>
 
-    <button @onclick="AddPlayer" disabled="@(IsConnected == false)">Add Player</button>
+    <button @onclick="SendMessage" disabled="@(IsConnected == false)">Send Message</button>
 </div>
+
+<div class="container">
+    <div class="form-group">
+        <label>
+            Private Message: <input @bind="privateMessage" />
+        </label>
+    </div>
+
+    <button @onclick="SendMessageToRoom" disabled="@(IsConnected == false)">Send to Private Room</button>
+</div>
+
+<div>
+    <button @onclick="AddPlayerToRoom" disabled="@(IsConnected == false)">Connect to Private Room</button>
+</div>
+<div>
+    <button @onclick="RemovePlayerFromRoom" disabled="@(IsConnected == false)">Leave Private Room</button>
+</div>
+
 
 <hr />
 
 <ul>
-    @foreach (var item in connectedPlayers)
+    @foreach (var item in messages)
     {
         <li>@item</li>
     }
@@ -30,9 +48,10 @@
 @code {
     private HubConnection? hubConnection;
 
-    private string? userName;
-    List<string> connectedPlayers = new();
-    private string roomName;
+    private string? message;
+    List<string> messages = new();
+    private string? privateMessage;
+    private string? roomName = "privateRoom";
 
     string qrCodeAsAsciiArt = "";
 
@@ -44,20 +63,42 @@
             .Build();
 
         //capture message from server
-        hubConnection.On<string>("ReceiveAnswer", user =>
+        hubConnection.On<string>("ReceiveAnswer", msg =>
         {
-            connectedPlayers.Add(user);
+            messages.Add(msg);
             InvokeAsync(StateHasChanged); //telling Blazor to check for new values
         });
 
         await hubConnection.StartAsync();
     }
 
-    private async Task AddPlayer()
+    private async Task SendMessage()
     {
         if (hubConnection is not null)
         {
-            await hubConnection.SendAsync("SendAnswer", userName);
+            await hubConnection.SendAsync("SendAnswer", message);
+        }
+    }
+    private async Task SendMessageToRoom()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendMessageToRoom", roomName, privateMessage);
+        }
+    }
+
+    private async Task AddPlayerToRoom()
+    {
+        if(hubConnection is not null)
+        {
+            await hubConnection.InvokeAsync("JoinRoom", roomName);
+        }
+    }    
+    private async Task RemovePlayerFromRoom()
+    {
+        if(hubConnection is not null)
+        {
+            await hubConnection.InvokeAsync("LeaveRoom", roomName);
         }
     }
 

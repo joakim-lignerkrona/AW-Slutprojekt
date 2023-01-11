@@ -14,7 +14,7 @@ namespace TriviaRoyale.Server.Hubs
 		{
 			return Clients.User(user).SendAsync("ReceiveMessage", message);
 		}
-
+		
 		public override Task OnConnectedAsync()
         {
             Console.WriteLine("User connected");
@@ -26,15 +26,22 @@ namespace TriviaRoyale.Server.Hubs
 		{
 			await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
 
-			await Clients.Group(roomName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {roomName}.");
+			await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"{Context.ConnectionId} has joined the group {roomName}.");
 		}
 
 		public async Task LeaveRoom(string roomName)
 		{
 			await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
 
-			await Clients.Group(roomName).SendAsync("Send", $"{Context.ConnectionId} has left the group {roomName}.");
+			await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"{Context.ConnectionId} has left the group {roomName}.");
 		}
+
+		public async Task SendMessageToRoom(string roomName, string message)
+		{
+			await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"Message: {message}");
+		}
+
+		
 
 
     }
