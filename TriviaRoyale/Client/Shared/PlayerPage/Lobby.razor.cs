@@ -1,29 +1,16 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace TriviaRoyale.Client.Shared.PlayerPage
+﻿namespace TriviaRoyale.Client.Shared.PlayerPage
 {
     public partial class Lobby
     {
-        [Parameter] public string Name { get; set; }
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            // You can use the name here as well
+            service.OnChange += StateHasChanged;
+
         }
 
-        private int countdown = 5;
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        public void Dispose()
         {
-            if(firstRender)
-            {
-                while(countdown > 0)
-                {
-                    await Task.Delay(1000); // 1 second delay
-                    countdown--;
-                    StateHasChanged(); // Forces the component to re-render
-                }
-                Navigation.NavigateTo("/Question");
-            }
+            service.OnChange -= StateHasChanged;
         }
 
     }

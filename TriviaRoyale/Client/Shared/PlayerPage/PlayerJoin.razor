@@ -1,13 +1,13 @@
 ﻿@using TriviaRoyale.Shared;
 @inject NavigationManager Navigation
-@inject HostService service;
+@inject PlayerService service;
 
 
 
 
 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
 	@*<h3>Registrera spelare</h3>*@
-	<br />
+	
 	<form>
 		<div>
 			<label for="name">Name:</label>
@@ -17,16 +17,18 @@
 		<button class="btn btn-primary p-2"type="submit" @onclick="CreatePlayer" @onclick:preventDefault>READY</button>
 	</form>
 </div>
-<br />
-<div>
-	<p>@player.Name</p>
-</div>
+
+
 @code {
+	[Parameter]
+	public string RoomID { get; set; }
 	private Player player = new Player();
 
 	private async Task CreatePlayer()
 	{
-		await service.hubConnection.SendAsync("CreatePlayer", player);
+        player.RoomID = RoomID;
 
+		await service.hubConnection.SendAsync("CreatePlayer", player);
+		service.Player = player;
 	}
 }
