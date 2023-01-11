@@ -1,20 +1,33 @@
 ﻿@using TriviaRoyale.Client.Shared.PlayerPage
-@page "/Player/{roomID}/{state}"
+@page "/Player/{roomID}"
+@inject HostService service;
 
 <h3>PlayerMain</h3>
-@if(state == "lobby")
-{
-    <Lobby />
-}
-else
-{
+
     <PlayerJoin />
-}
+
 
 @code {
     [Parameter]
-    public string state { get; set; } = "";
-    [Parameter]
     public string roomID { get; set; } = "";
 
+    protected override async Task OnInitializedAsync()
+    {
+        service.OnChange += StateHasChanged;
+
+        if(!IsConnected)
+        {
+            await service.ConnectAsync();
+
+        }
+    }
+
+
+    public bool IsConnected =>
+        service.hubConnection?.State == HubConnectionState.Connected;
+
+    public void Dispose()
+    {
+        service.OnChange -= StateHasChanged;
+    }
 }
