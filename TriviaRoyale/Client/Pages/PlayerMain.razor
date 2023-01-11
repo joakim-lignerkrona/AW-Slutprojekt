@@ -1,12 +1,10 @@
 ﻿@using TriviaRoyale.Client.Shared.PlayerPage
-@page "/Player"
+@page "/Player/{roomID}/{state}"
+
 <h3>PlayerMain</h3>
 @if(state == "lobby")
 {
-   
     <Lobby />
-
-
 }
 else
 {
@@ -14,5 +12,9 @@ else
 }
 
 @code {
-    string state = "lobby";
+    [Parameter]
+    public string state { get; set; } = "";
+    [Parameter]
+    public string roomID { get; set; } = "";
+
 }
