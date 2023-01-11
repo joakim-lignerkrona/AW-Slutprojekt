@@ -1,4 +1,4 @@
-﻿namespace TriviaRoyale.Client.Pages
+﻿namespace TriviaRoyale.Shared
 {
 	public class Player
 	{
@@ -10,9 +10,9 @@
 		{
 			createdPlayers++;
 		}
-		//public Player(string name)
-		//{
-		//	this.Name = name;
-		//}
+		public Player(string name)
+		{
+			this.Name = name;
+		}
 	}
 }
