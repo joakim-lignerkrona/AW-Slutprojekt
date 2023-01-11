@@ -8,7 +8,7 @@ namespace TriviaRoyale.Client.Models
     {
         public Player Player { get; set; }
         public string RoomID { get; set; }
-        public string GameState { get; set; } = "PlayersJoining";
+        public GameState GameState { get; set; } = GameState.Lobby;
         public List<Player> Players { get; set; } = new();
         public HubConnection? hubConnection;
         public event Action OnChange;
@@ -26,7 +26,7 @@ namespace TriviaRoyale.Client.Models
                 Players.Add(player);
                 NotifyStateChanged();
             });
-            hubConnection.On<string>("StateChange", (state) =>
+            hubConnection.On<GameState>("StateChange", (state) =>
             {
                 GameState = state;
                 NotifyStateChanged();
