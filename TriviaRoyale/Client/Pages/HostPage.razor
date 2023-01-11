@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using TriviaRoyale.Client.Shared.Host.JoinScreen
+@using TriviaRoyale.Client.Shared.Host.QuestionScreen
 @inject NavigationManager Navigation
 
 
@@ -10,7 +11,7 @@
 <PageTitle>Trivia Royale</PageTitle>
 
 
-<PlayerJoinScreen />
+<Question />
 
 <div>
     <h3>Messages:</h3>
