@@ -1,0 +1,18 @@
+﻿@using TriviaRoyale.Client.Shared.PlayerPage
+@page "/Player"
+<h3>PlayerMain</h3>
+@if(state == "lobby")
+{
+   
+    <Lobby />
+
+
+}
+else
+{
+    <PlayerJoin />
+}
+
+@code {
+    string state = "lobby";
+}
