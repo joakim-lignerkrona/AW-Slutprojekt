@@ -1,10 +1,23 @@
 ﻿@using TriviaRoyale.Client.Shared.PlayerPage
+@using TriviaRoyale.Shared;
 @page "/Player/{roomID}"
-@inject HostService service;
+@inject PlayerService service;
 
-<h3>PlayerMain</h3>
+<div>
 
-    <PlayerJoin />
+    @if(service.Player == null)
+    {
+        <PlayerJoin RoomID="roomID"/>
+    }
+    else if(service.GameState == GameState.Lobby)
+    {
+            <Lobby />
+    }
+    else if(service.GameState == GameState.Playing)
+    {
+        <Playing />
+    }
+</div>
 
 
 @code {
