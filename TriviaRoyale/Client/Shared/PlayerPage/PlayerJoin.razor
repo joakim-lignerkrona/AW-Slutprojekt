@@ -1,5 +1,6 @@
 ﻿@using TriviaRoyale.Shared;
 @inject NavigationManager Navigation
+@inject HostService service;
 
 
 
@@ -13,7 +14,7 @@
 			<input class="form-control mb-2" type="text" id="name" @bind="player.Name" />
 		</div>
 		
-		<button class="btn btn-primary"type="submit" @onclick="CreatePlayer">READY</button>
+		<button class="btn btn-primary p-2"type="submit" @onclick="CreatePlayer" @onclick:preventDefault>READY</button>
 	</form>
 </div>
 <br />
@@ -23,10 +24,9 @@
 @code {
 	private Player player = new Player();
 
-	private void CreatePlayer()
+	private async Task CreatePlayer()
 	{
+		await service.hubConnection.SendAsync("CreatePlayer", player);
 
-		if (player.Name != null)
-			Navigation.NavigateTo($"/Host/{player.Name}");
 	}
 }
