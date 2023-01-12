@@ -52,6 +52,8 @@ namespace TriviaRoyale.Server.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
 
+			await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
+		}
             await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"{Context.ConnectionId} has joined the group {roomName}.");
         }
 
@@ -59,6 +61,8 @@ namespace TriviaRoyale.Server.Hubs
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
 
+			await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has left the group {roomName}.");
+		}
             await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"{Context.ConnectionId} has left the group {roomName}.");
         }
 

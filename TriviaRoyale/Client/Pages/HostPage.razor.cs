@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TriviaRoyale.Client.Pages
 {
     public partial class HostPage
     {
 
+        [Parameter]
+        public string RoomId { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -13,6 +16,8 @@ namespace TriviaRoyale.Client.Pages
             if(!IsConnected)
             {
                 await service.ConnectAsync();
+                await service.hubConnection.InvokeAsync("JoinRoom", RoomId);
+                service.RoomID = RoomId;
 
             }
         }
