@@ -1,8 +1,7 @@
-﻿@page "/"
-@using Microsoft.AspNetCore.SignalR.Client;
-@using TriviaRoyale.Client.Shared.Host.JoinScreen
-@using TriviaRoyale.Client.Shared.Host.QuestionScreen
-@inject NavigationManager Navigation
+﻿@page "/Host/{RoomId}"
+
+@inject HostService service;
+
 
 
 
@@ -13,18 +12,13 @@
 
 <QuestionScreen />
 
-<div>
-    <h3>Messages:</h3>
-    @foreach(var msg in messages)
-    {
-        <p>@msg</p>
-    }
-</div>
+
 
 
 
 @code {
-    
-   
-    
+
+
+
+
 }

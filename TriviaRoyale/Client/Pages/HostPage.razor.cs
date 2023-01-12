@@ -1,37 +1,34 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TriviaRoyale.Client.Pages
 {
     public partial class HostPage
     {
-        private HubConnection? hubConnection;
-        private List<string> messages = new List<string>();
+
+        [Parameter]
+        public string RoomId { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            hubConnection = new HubConnectionBuilder()
-                .WithUrl(Navigation.ToAbsoluteUri("/Quiz"))
-                .Build();
+            service.OnChange += StateHasChanged;
 
-            hubConnection.On<string, string>("ReceiveAnswer", (user, answer) =>
+            if(!IsConnected)
             {
-                var encodedMsg = $"{answer}";
-                messages.Add(encodedMsg);
-                StateHasChanged();
-            });
+                await service.ConnectAsync();
+                await service.hubConnection.InvokeAsync("JoinRoom", RoomId);
+                service.RoomID = RoomId;
 
-            await hubConnection.StartAsync();
+            }
         }
 
-        public bool IsConnected =>
-            hubConnection?.State == HubConnectionState.Connected;
 
-        public async ValueTask DisposeAsync()
+        public bool IsConnected =>
+            service.hubConnection?.State == HubConnectionState.Connected;
+
+        public void Dispose()
         {
-            if(hubConnection is not null)
-            {
-                await hubConnection.DisposeAsync();
-            }
+            service.OnChange -= StateHasChanged;
         }
     }
 }

@@ -16,15 +16,15 @@ jobs:
         with:
           dotnet-version: ${{matrix.dotnet-version}}
       - name: Install dependencies
-        run: dotnet restore ./Client/TriviaRoyale.Client.csproj
-      - run: dotnet restore ./Client/TriviaRoyale.Server.csproj
+        run: |
+          dotnet restore ./TriviaRoyale/Client/TriviaRoyale.Client.csproj
+          dotnet restore ./TriviaRoyale/Server/TriviaRoyale.Server.csproj
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./TriviaRoyale/Server/TriviaRoyale.Server.csproj --configuration Release --no-restore
         
       - name: Publish
-        run: dotnet publish -c Release -o /var/www/slutprojekt
+        run: dotnet publish ./TriviaRoyale/Server/TriviaRoyale.Server.csproj -c Release -o /var/www/slutprojekt
       - name: Restart the app
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
           systemctl --user restart triviaroyale.service
-

@@ -4,27 +4,17 @@ using TriviaRoyale.Shared;
 
 namespace TriviaRoyale.Client.Models
 {
-    public class HostService
+    public class PlayerService
     {
-        private string roomID;
-
-        public string RoomID
-        {
-            get { return roomID; }
-            set
-            {
-                roomID = value;
-                NotifyStateChanged();
-            }
-        }
-
-
+        public Player Player { get; set; }
+        public string RoomID { get; set; }
+        public GameState GameState { get; set; } = GameState.Lobby;
         public List<Player> Players { get; set; } = new();
         public HubConnection? hubConnection;
         public event Action OnChange;
         private void NotifyStateChanged() => OnChange?.Invoke();
 
-        public HostService(NavigationManager Navigation)
+        public PlayerService(NavigationManager Navigation)
         {
             Console.WriteLine(Navigation.BaseUri + "Quiz");
             hubConnection = new HubConnectionBuilder()
@@ -36,18 +26,17 @@ namespace TriviaRoyale.Client.Models
                 Players.Add(player);
                 NotifyStateChanged();
             });
-
-            hubConnection.On<string>("ServerLog", Console.WriteLine);
+            hubConnection.On<GameState>("StateChange", (state) =>
+            {
+                GameState = state;
+                NotifyStateChanged();
+            });
         }
 
         public async Task ConnectAsync()
         {
             await hubConnection.StartAsync();
             NotifyStateChanged();
-        }
-        public void StartGame()
-        {
-            hubConnection.SendAsync("StartGame");
         }
 
         public bool IsConnected =>
@@ -62,4 +51,6 @@ namespace TriviaRoyale.Client.Models
         }
 
     }
+
 }
+
