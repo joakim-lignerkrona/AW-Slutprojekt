@@ -1,0 +1,118 @@
+﻿@page "/tester"
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavManager
+@implements IAsyncDisposable
+
+
+<PageTitle>Trivia Royale</PageTitle>
+
+<h1>Welcome!</h1>
+
+<div class="container">
+    <div class="form-group">
+        <label>
+            Global Message: <input @bind="message" />
+        </label>
+    </div>
+
+    <button @onclick="SendMessage" disabled="@(IsConnected == false)">Send Message</button>
+</div>
+
+<div class="container">
+    <div class="form-group">
+        <label>
+            Private Message: <input @bind="privateMessage" />
+        </label>
+    </div>
+
+    <button @onclick="SendMessageToRoom" disabled="@(IsConnected == false)">Send to Private Room</button>
+</div>
+
+<div>
+    <button @onclick="AddPlayerToRoom" disabled="@(IsConnected == false)">Connect to Private Room</button>
+</div>
+<div>
+    <button @onclick="RemovePlayerFromRoom" disabled="@(IsConnected == false)">Leave Private Room</button>
+</div>
+
+
+<hr />
+
+<ul>
+    @foreach (var item in messages)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+@code {
+    private HubConnection? hubConnection;
+
+    private string? message;
+    List<string> messages = new();
+    private string? privateMessage;
+    private string? roomName = "privateRoom";
+
+    List<string> playersInRoom = new();
+
+    string qrCodeAsAsciiArt = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavManager.ToAbsoluteUri("/Quiz"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        //capture message from server
+        hubConnection.On<string>("ReceiveAnswer", msg =>
+        {
+            messages.Add(msg);
+            InvokeAsync(StateHasChanged); //telling Blazor to check for new values
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task SendMessage()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendAnswer", message);
+        }
+    }
+    private async Task SendMessageToRoom()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendMessageToRoom", roomName, privateMessage);
+        }
+    }
+
+    private async Task AddPlayerToRoom()
+    {
+        if(hubConnection is not null)
+        {
+            await hubConnection.InvokeAsync("JoinRoom", roomName);
+        }
+    }    
+    private async Task RemovePlayerFromRoom()
+    {
+        if(hubConnection is not null)
+        {
+            await hubConnection.InvokeAsync("LeaveRoom", roomName);
+        }
+    }
+
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
