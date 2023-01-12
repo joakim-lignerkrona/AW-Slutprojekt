@@ -1,5 +1,77 @@
-﻿<h3>Question</h3>
+﻿@using TriviaRoyale.Shared;
+@using TriviaRoyale.Client.Models;
+@using System.Text.Json;
+@inject NavigationManager navigation
 
+<div class="container">
+    <div class="row mb-5">
+        <div class="d-flex justify-content-between">
+            <div id="QR-output">
+                <h3>Question</h3>
+                
+                @GetQuestion
+                @question
+                console.log(@question)
+                console.log(@question)
+                @question
+
+            @*    Skriva ut fråga.fråga
+
+                Skriva ut fråga.svar i annan div typ.*@
+
+                
+                @*returnerar *@
+
+
+            </div>
+            <div id="player-list" class="border-2 flex-grow-1">
+                <ul>
+                    <li>Player 1</li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-secondary p-5" @onclick="GetQuestion">
+                <span class="h1">
+                    Start Game
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
 @code {
+    // Hämta en random fråga.
+    //NavigationManager navigation;
+    public Question question { get; set; }
+
+    async void GetQuestion()
+    {
+        string url = navigation.BaseUri + "/API/Question/next";
+        HttpClient httpClient = new();
+        var q = await httpClient.GetAsync(url);
+
+        if (q.IsSuccessStatusCode)
+        {
+            // Read the response content
+            var content = await q.Content.ReadAsStringAsync();
+
+
+            // Deserialize the content into an object
+            var data = JsonSerializer.Deserialize<Question>(content);
+            Console.WriteLine(data);
+            question = data.question;
+            Console.WriteLine(question);
+        }
+
+
+        //q.question.question 
+        //q.question.answer
+        
+        
+
+    }
 
 }

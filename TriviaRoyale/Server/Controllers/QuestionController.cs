@@ -6,7 +6,7 @@ namespace TriviaRoyale.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionControllerAPI : ControllerBase
+    public class QuestionController : ControllerBase
     {
 
         //TODO 
@@ -25,7 +25,7 @@ namespace TriviaRoyale.Server.Controllers
         private readonly IConfiguration configuration;
 
         //DI
-        public QuestionControllerAPI(DataService service, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public QuestionController(DataService service, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             this.service = service;
             this.webHostEnvironment = webHostEnvironment;
@@ -40,7 +40,9 @@ namespace TriviaRoyale.Server.Controllers
             return service.GetQuestions();
         }
 
-
+        [HttpGet("Next")]
+        public Question GetQuestion() => service.GetQuestion();
+     
 
 
         //SERVER SIDE
