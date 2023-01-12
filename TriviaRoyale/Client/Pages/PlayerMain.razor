@@ -24,8 +24,11 @@
                 break;
             case GameState.OpponentToAnswer:
                 <OpponentToAnswer />
-                
                 break;
+            case GameState.Ended:
+                <Ended />
+                break;
+
             default:
                 <PlayerJoin RoomID="roomID" />
                 break;

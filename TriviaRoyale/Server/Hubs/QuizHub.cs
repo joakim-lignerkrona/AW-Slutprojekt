@@ -30,7 +30,13 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.All.SendAsync("StateChange", GameState.Playing);
         }
 
-        public override Task OnConnectedAsync()
+
+		public async Task EndOfGame()
+		{
+			await Clients.All.SendAsync("StateChange", GameState.Ended);
+
+		}
+		public override Task OnConnectedAsync()
         {
             Console.WriteLine("User connected");
 
