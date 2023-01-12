@@ -4,6 +4,7 @@
     {
         Lobby,
         Playing,
+        PlayerToAnswer,
         Ended
     }
 }

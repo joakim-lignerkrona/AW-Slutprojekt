@@ -14,6 +14,12 @@ namespace TriviaRoyale.Server.Hubs
         {
             await Clients.All.SendAsync("NewPlayer", player);
         }
+
+        public async Task AnswerButton()
+        {
+            await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
+
+        }
         public async Task StartGame()
         {
             await Clients.All.SendAsync("StateChange", GameState.Playing);
