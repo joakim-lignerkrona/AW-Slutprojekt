@@ -1,5 +1,9 @@
-﻿<h3>PlayerToAnswer</h3>
+﻿@inject PlayerService service;
 
+
+<h3>PlayerToAnswer: @service.Player.Name</h3>
+<p>Points: @service.Player.Points</p>
+<p>RoomID: @service.Player.RoomID</p>
 @code {
 
 }

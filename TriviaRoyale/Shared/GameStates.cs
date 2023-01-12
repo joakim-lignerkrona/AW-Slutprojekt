@@ -5,6 +5,7 @@
         Lobby,
         Playing,
         PlayerToAnswer,
+        OpponentToAnswer,
         Ended
     }
 }
