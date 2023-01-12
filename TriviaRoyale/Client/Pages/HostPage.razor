@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/{RoomId}"
 
 @inject HostService service;
 
@@ -17,7 +17,9 @@
 
 
 @code {
-    
-   
-    
+
+    [Parameter]
+    public string RoomId { get; set; }
+
+
 }

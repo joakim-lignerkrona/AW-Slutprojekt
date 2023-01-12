@@ -61,7 +61,7 @@ namespace TriviaRoyale
 
 
             app.MapRazorPages();
-            app.MapHub<QuizHub>("/Quiz");
+            app.MapHub<QuizHub>(pattern:"/Quiz");
             app.MapControllers();
             app.MapFallbackToFile("index.html");
 
