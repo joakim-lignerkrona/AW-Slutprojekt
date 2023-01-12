@@ -1,4 +1,8 @@
-﻿namespace TriviaRoyale.Client.Models
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
+using TriviaRoyale.Shared;
+
+namespace TriviaRoyale.Client.Models
 {
     public class HostService
     {
