@@ -65,12 +65,6 @@
         service.StartGame();
     }
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        encodedUrl = HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}");
-        return base.OnAfterRenderAsync(firstRender);
-    }
-
     protected override async Task OnInitializedAsync()
     {
         service.OnChange += StateHasChanged;
