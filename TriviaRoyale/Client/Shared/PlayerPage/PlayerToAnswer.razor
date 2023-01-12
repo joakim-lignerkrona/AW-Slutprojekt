@@ -5,8 +5,17 @@
 <p>Points: @service.Player.Points</p>
 <p>RoomID: @service.Player.RoomID</p>
 <button class="btn btn-primary p-2" type="submit" @onclick="GameEnded" @onclick:preventDefault>Simulate Game Over</button>
+<button class="btn btn-primary p-2" type="submit" @onclick="NewQuestion" @onclick:preventDefault>Simulate New Question</button>
 
 @code {
+
+
+	private async Task NewQuestion()
+	{
+		await service.hubConnection.SendAsync("StartGame");
+
+	}
+
 	private async Task GameEnded()
 	{
 		await service.hubConnection.SendAsync("EndOfGame");
