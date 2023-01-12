@@ -7,16 +7,25 @@
 
     @if(service.Player == null)
     {
-        <PlayerJoin RoomID="roomID"/>
+        <PlayerJoin RoomID="roomID" />
     }
-    else if(service.GameState == GameState.Lobby)
+    else 
     {
-            <Lobby />
+        switch(service.GameState)
+        {
+            case GameState.Lobby:
+                <Lobby />
+                break;
+            case GameState.Playing:
+                <Playing />
+                break;
+            default:
+                <PlayerJoin RoomID="roomID" />
+                break;
+        }
+       
     }
-    else if(service.GameState == GameState.Playing)
-    {
-        <Playing />
-    }
+    
 </div>
 
 
