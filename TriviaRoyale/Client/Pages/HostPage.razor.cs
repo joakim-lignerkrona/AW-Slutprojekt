@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR.Client;
-
-namespace TriviaRoyale.Client.Pages
+﻿namespace TriviaRoyale.Client.Pages
 {
     public partial class HostPage
     {
