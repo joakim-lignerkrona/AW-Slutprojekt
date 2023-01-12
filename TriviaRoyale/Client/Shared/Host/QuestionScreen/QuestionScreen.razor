@@ -3,6 +3,7 @@
 @using System.Text.Json;
 @using TriviaRoyale.Shared.Questions
 @inject NavigationManager navigation
+@inject HostService service
 
 <div class="container">
     <div class="row mb-5">
@@ -11,16 +12,17 @@
                 <h3>Question</h3>
                 <p>
                     @question?.questionText
-                    </p>
-                    <p>
+                </p>
+                <p>
                     @question?.answer
 
                 </p>
             </div>
             <div id="player-list" class="border-2 col-6">
-                <ul>
-                    <li>Player 1</li>
-                </ul>
+@*                @if (service.playerAnswering != null)
+                {
+                    <TriviaRoyale.Client.Shared.Components.PlayerComponent Player="service.playerAnswering"></TriviaRoyale.Client.Shared.Components.PlayerComponent>
+                }*@
             </div>
         </div>
     </div>
@@ -46,7 +48,7 @@
         //Flytta ut nedan till metoden.
         string url = navigation.BaseUri + "API/Question/";
         HttpClient httpClient = new();
-        
+
         var q = await httpClient.GetAsync(url);
         if (q.IsSuccessStatusCode)
         {
