@@ -17,6 +17,7 @@ namespace TriviaRoyale.Client.Pages
             {
                 await service.ConnectAsync();
                 await service.hubConnection.InvokeAsync("JoinRoom", RoomId);
+                service.RoomID= RoomId;
 
             }
         }

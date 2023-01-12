@@ -6,7 +6,19 @@ namespace TriviaRoyale.Client.Models
 {
     public class HostService
     {
-        public string RoomID { get; set; }
+        private string roomID;
+
+        public string RoomID
+        {
+            get { return roomID; }
+            set
+            { 
+                roomID = value;
+                NotifyStateChanged();
+            }
+        }
+
+
         public List<Player> Players { get; set; } = new();
         public HubConnection? hubConnection;
         public event Action OnChange;

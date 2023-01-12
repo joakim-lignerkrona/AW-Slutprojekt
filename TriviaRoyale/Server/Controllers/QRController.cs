@@ -29,7 +29,7 @@ namespace TriviaRoyale.Server.Controllers
         {
             GameHost host = new();
             
-            return Redirect($"/{host.Id}");
+            return Redirect($"/Host/{host.Id}");
         }
     }
 }
