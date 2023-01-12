@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Net.NetworkInformation;
 using TriviaRoyale.Shared;
 
 namespace TriviaRoyale.Client.Models
@@ -20,6 +21,7 @@ namespace TriviaRoyale.Client.Models
 
 
         public List<Player> Players { get; set; } = new();
+        public Player playerAnswering { get; set; }
         public HubConnection? hubConnection;
         public event Action OnChange;
         private void NotifyStateChanged() => OnChange?.Invoke();
@@ -36,6 +38,17 @@ namespace TriviaRoyale.Client.Models
                 Players.Add(player);
                 NotifyStateChanged();
             });
+            hubConnection.On<Player>("PlayerWantsToAnswer", (player) =>
+                {
+                    //TODO
+                    //
+                    //Läsa av svarstid (DateTime, Pinga?)
+                    playerAnswering = player;
+                    NotifyStateChanged();
+
+                });
+
+
 
             hubConnection.On<string>("ServerLog", Console.WriteLine);
         }
@@ -55,7 +68,7 @@ namespace TriviaRoyale.Client.Models
 
         public async ValueTask DisposeAsync()
         {
-            if(hubConnection is not null)
+            if (hubConnection is not null)
             {
                 await hubConnection.DisposeAsync();
             }

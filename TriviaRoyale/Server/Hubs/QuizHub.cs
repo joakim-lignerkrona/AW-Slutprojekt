@@ -49,7 +49,10 @@ namespace TriviaRoyale.Server.Hubs
 		{
 			await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"Message: {message}");
 		}
-
+		public async Task PlayerWantsToAnswer(Player player)
+		{
+			await Clients.All.SendAsync("PlayerWantsToAnswer", player);
+		}
 		
 
 
