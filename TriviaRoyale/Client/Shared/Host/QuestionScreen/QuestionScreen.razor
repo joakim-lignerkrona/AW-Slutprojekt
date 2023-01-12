@@ -1,0 +1,68 @@
+﻿@using TriviaRoyale.Shared;
+@using TriviaRoyale.Client.Models;
+@using System.Text.Json;
+@using TriviaRoyale.Shared.Questions
+@inject NavigationManager navigation
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="d-flex justify-content-between">
+            <div class="col-6">
+                <h3>Question</h3>
+                <p>
+                    @question?.questionText
+                    </p>
+                    <p>
+                    @question?.answer
+
+                </p>
+            </div>
+            <div id="player-list" class="border-2 col-6">
+                <ul>
+                    <li>Player 1</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-secondary p-5" @onclick="OnInitialized">
+                <span class="h3">
+                    New question!
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Question question { get; set; }
+
+    async protected override void OnInitialized()
+    {
+        //TODO
+        //Fixa så att inte samma fråga kommer två gånger
+        //GetRandomQuestion();
+        //Flytta ut nedan till metoden.
+        string url = navigation.BaseUri + "API/Question/";
+        HttpClient httpClient = new();
+        
+        var q = await httpClient.GetAsync(url);
+        if (q.IsSuccessStatusCode)
+        {
+            // Read the response content
+            var content = await q.Content.ReadAsStringAsync();
+            //// Deserialize the content into an object
+            question = JsonSerializer.Deserialize<Question>(content);
+            StateHasChanged();
+        }
+    }
+    //async Task<Question> GetQuestion()
+    //{
+    //    QuestionText = "Vad heter Egyptens motsvarighet till Hesa Fredrik?";
+    //    Answer = "Tutan Khamon..";
+    //    return question;
+    //}
+
+
+}

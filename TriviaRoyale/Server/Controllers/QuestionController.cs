@@ -33,7 +33,7 @@ namespace TriviaRoyale.Server.Controllers
         }
 
         //CLIENT SIDE
-        [HttpGet]
+        [HttpGet("")]
         public Question[] GetList()
         {
 
