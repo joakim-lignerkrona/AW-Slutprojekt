@@ -24,6 +24,8 @@ namespace TriviaRoyale.Client.Models
                 Players.Add(player);
                 NotifyStateChanged();
             });
+
+            hubConnection.On<string>("ServerLog", Console.WriteLine);
         }
 
         public async Task ConnectAsync()
