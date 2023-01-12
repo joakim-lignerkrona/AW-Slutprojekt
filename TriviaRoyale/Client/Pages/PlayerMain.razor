@@ -1,0 +1,55 @@
+﻿@using TriviaRoyale.Client.Shared.PlayerPage
+@using TriviaRoyale.Shared;
+@page "/Player/{roomID}"
+@inject PlayerService service;
+
+<div>
+
+    @if(service.Player == null)
+    {
+        <PlayerJoin RoomID="roomID" />
+    }
+    else 
+    {
+        switch(service.GameState)
+        {
+            case GameState.Lobby:
+                <Lobby />
+                break;
+            case GameState.Playing:
+                <Playing />
+                break;
+            default:
+                <PlayerJoin RoomID="roomID" />
+                break;
+        }
+       
+    }
+    
+</div>
+
+
+@code {
+    [Parameter]
+    public string roomID { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        service.OnChange += StateHasChanged;
+
+        if(!IsConnected)
+        {
+            await service.ConnectAsync();
+
+        }
+    }
+
+
+    public bool IsConnected =>
+        service.hubConnection?.State == HubConnectionState.Connected;
+
+    public void Dispose()
+    {
+        service.OnChange -= StateHasChanged;
+    }
+}
