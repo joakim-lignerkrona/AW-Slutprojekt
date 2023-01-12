@@ -7,8 +7,8 @@
     <div class="row mb-5">
         <div class="d-flex justify-content-between ">
             <div id="QR-output" class="col-6">
-                <a href="@(navigation.BaseUri + "player/defaultRoom")" target="_blank">
-                <img class="img-fluid" src="/qr/@encodedUrl" alt="QRcode with link to game" />
+                <a href="@(navigation.BaseUri + $"player/{service.RoomID}")" target="_blank">
+                    <img class="img-fluid" src="@URL" alt="QRcode with link to game" />
                 </a>
             </div>
             <div id="player-list" class="border-2 flex-grow-1 bg-dark p-3 rounded-4 col-6">
@@ -60,14 +60,26 @@
 
 @code {
     string encodedUrl = "";
+    public string URL {
+        get
+        {
+            return $"{navigation.BaseUri}qr/{encodedUrl}";
+        }
+        set
+        {
+            encodedUrl = HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}");
+            StateHasChanged();
+        } 
+    }
     void StartGame()
     {
         service.StartGame();
     }
-    protected override void OnInitialized()
-    {
-        encodedUrl = HttpUtility.UrlEncode(navigation.BaseUri + "player/defaultRoom");
 
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        encodedUrl = HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}");
+        return base.OnAfterRenderAsync(firstRender);
     }
 
     protected override async Task OnInitializedAsync()
