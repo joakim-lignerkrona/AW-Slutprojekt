@@ -5,13 +5,13 @@
 
 <div class="container">
     <div class="row mb-5">
-        <div class="d-flex justify-content-between">
-            <div id="QR-output">
+        <div class="d-flex justify-content-between ">
+            <div id="QR-output" class="col-6">
                 <a href="@(navigation.BaseUri + "player/defaultRoom")" target="_blank">
                 <img class="img-fluid" src="/qr/@encodedUrl" alt="QRcode with link to game" />
                 </a>
             </div>
-            <div id="player-list" class="border-2 flex-grow-1 bg-dark p-3 rounded-4">
+            <div id="player-list" class="border-2 flex-grow-1 bg-dark p-3 rounded-4 col-6">
                 @if(!service.IsConnected)
                 {
                     <div class="d-flex justify-content-center text-light">
@@ -73,13 +73,7 @@
     protected override async Task OnInitializedAsync()
     {
         service.OnChange += StateHasChanged;
-
-        
-
     }
-
-
-    
 
     public void Dispose()
     {
