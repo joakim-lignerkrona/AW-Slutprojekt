@@ -41,7 +41,7 @@
 <ul>
     @foreach (var item in messages)
     {
-        <li>@item</li>
+        <li>@item</li>s
     }
 </ul>
 
@@ -52,6 +52,7 @@
     List<string> messages = new();
     private string? privateMessage;
     private string? roomName = "privateRoom";
+
 
     string qrCodeAsAsciiArt = "";
 
