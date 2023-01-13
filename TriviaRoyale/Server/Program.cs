@@ -18,6 +18,8 @@ namespace TriviaRoyale
             builder.Services.AddTransient<QRService>();
 
             builder.Services.AddSingleton<DataService>();
+            builder.Services.AddSingleton<RoomService>();
+
 
 
             builder.Services.AddSignalR();
@@ -61,7 +63,7 @@ namespace TriviaRoyale
 
 
             app.MapRazorPages();
-            app.MapHub<QuizHub>(pattern:"/Quiz");
+            app.MapHub<QuizHub>(pattern: "/Quiz");
             app.MapControllers();
             app.MapFallbackToFile("index.html");
 

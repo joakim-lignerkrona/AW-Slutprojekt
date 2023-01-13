@@ -20,6 +20,7 @@ namespace TriviaRoyale.Client.Pages
                 service.RoomID = RoomId;
 
             }
+            service.GetPlayers();
         }
 
 
