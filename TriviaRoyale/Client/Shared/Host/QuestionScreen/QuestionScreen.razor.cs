@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Text.Json;
-using TriviaRoyale.Shared;
 using TriviaRoyale.Shared.Questions;
 
 
@@ -8,15 +7,15 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 {
     public partial class QuestionScreen
     {
-        
+
         [Parameter]
-           public bool CorrectAnswer { get; set; }
+        public bool CorrectAnswer { get; set; }
         public Question question { get; set; }
 
         async protected override void OnInitialized()
         {
             await GetQuestion();
-        }        
+        }
 
         private void PlayerGuess(Question question)
         {
@@ -25,9 +24,9 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         private async Task PlayerGuess()
         {
-            if (CorrectAnswer)
+            if(CorrectAnswer)
             {
-                service.playerAnswering.Points++;
+                service.PlayerAnswering.Points++;
                 //Koppla samman detta med listan av players?
                 //Vänta på knapptryck av hosten för att komma tillbax
             }
@@ -44,9 +43,9 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         {
             string url = navigation.BaseUri + "API/Question/";
             HttpClient httpClient = new();
-            
+
             var q = await httpClient.GetAsync(url);
-            if (q.IsSuccessStatusCode)
+            if(q.IsSuccessStatusCode)
             {
                 // Read the response content
                 var content = await q.Content.ReadAsStringAsync();
