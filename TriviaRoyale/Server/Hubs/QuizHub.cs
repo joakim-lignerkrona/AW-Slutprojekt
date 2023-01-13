@@ -1,10 +1,17 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using TriviaRoyale.Server.Models;
 using TriviaRoyale.Shared;
 
 namespace TriviaRoyale.Server.Hubs
 {
     public class QuizHub : Hub
     {
+        public RoomService Service { get; }
+
+        public QuizHub(RoomService service)
+        {
+            Service = service;
+        }
         public async Task SendAnswer(string answer)
         {
             await Clients.All.SendAsync("ReceiveAnswer", answer);
@@ -12,7 +19,12 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task CreatePlayer(Player player)
         {
-            await Clients.All.SendAsync("NewPlayer", player);
+            player.SocketID = Context.ConnectionId;
+            Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
+            await Groups.AddToGroupAsync(player.SocketID, player.RoomID);
+            await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+
+
         }
 
         public async Task AnswerButton1()
@@ -20,6 +32,12 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
 
         }
+        public async Task GetConnectedPlayers(string roomName)
+        {
+            await Clients.User(Context.UserIdentifier).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
+
+        }
+
         public async Task AnswerButton2()
         {
             await Clients.All.SendAsync("StateChange", GameState.OpponentToAnswer);
@@ -51,7 +69,6 @@ namespace TriviaRoyale.Server.Hubs
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-
             await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
         }
 
