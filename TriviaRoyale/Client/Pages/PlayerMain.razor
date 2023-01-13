@@ -19,6 +19,16 @@
             case GameState.Playing:
                 <Playing />
                 break;
+            case GameState.PlayerToAnswer:
+                <PlayerToAnswer />
+                break;
+            case GameState.OpponentToAnswer:
+                <OpponentToAnswer />
+                break;
+            case GameState.Ended:
+                <Ended />
+                break;
+
             default:
                 <PlayerJoin RoomID="roomID" />
                 break;

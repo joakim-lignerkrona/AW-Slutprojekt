@@ -1,14 +1,20 @@
-﻿
+﻿@inject PlayerService service;
+
 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 96vh;">
 
-    <h3 class="mb-5">Press the button when you know the answer</h3>
-    <div class="w-100 flex-grow-1">
+	<h3 class="mb-5">Press the button when you know the answer</h3>
+	<div class="w-100 flex-grow-1">
 
-        <button class="btn w-100 btn-primary p-3" style="height: 100%">
-            <span class="h1">ANSWER</span>
-        </button>
-    </div>
+		<button class="btn w-100 btn-primary p-3" style="height: 100%" @onclick="Answer">
+			<span class="h1">ANSWER</span>
+		</button>
+	</div>
 </div>
-@code {
 
+
+@*Lägg till metod som skickar ett meddelande till servern om vem som tryckte på knappen först.*@
+
+@code {
+	@*All kod ligger i Playing.razor.cs*@
 }
+
