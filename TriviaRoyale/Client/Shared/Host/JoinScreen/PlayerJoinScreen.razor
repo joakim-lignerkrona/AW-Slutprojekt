@@ -68,7 +68,7 @@
         service.StartGame();
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override  void OnInitialized()
     {
         service.OnChange += StateHasChanged;
     }
