@@ -27,8 +27,23 @@ namespace TriviaRoyale.Server.Hubs
 
         }
 
+        //public async Task AnswerPlayer(string playerName)
+        //{
+        //    await Clients.All.SendAsync("StateChange", playerName, GameState.PlayerToAnswer);
+
+        //}
+
+        public async Task PlayerClick(string name)
+        {
+
+            await Clients.All.SendAsync("PlayerIsAnswering", name,GameState.PlayerToAnswer);
+
+
+        }
+
         public async Task AnswerButton1()
         {
+
             await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
 
         }
@@ -69,6 +84,7 @@ namespace TriviaRoyale.Server.Hubs
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+
             await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
         }
 
