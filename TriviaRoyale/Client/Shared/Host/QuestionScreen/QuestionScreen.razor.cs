@@ -1,23 +1,40 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Text.Json;
+using TriviaRoyale.Client.Models;
 using TriviaRoyale.Shared.Questions;
+
 
 namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 {
     public partial class QuestionScreen
     {
+        
         [Parameter]
+           public bool CorrectAnswer { get; set; }
         public Question question { get; set; }
 
         async protected override void OnInitialized()
         {
-            //TODO
-            //Fixa så att inte samma fråga kommer två gånger
-            //GetRandomQuestion();
-            //Flytta ut nedan till metoden.
+            
+            GetQuestion();
+            PlayerGuess();
+
+
+        }
+
+        private void PlayerGuess()
+        {
+            if (CorrectAnswer)
+            {
+                //Lägg till poäng till spelare 
+            }
+        }
+
+        async Task GetQuestion()
+        {
             string url = navigation.BaseUri + "API/Question/";
             HttpClient httpClient = new();
-
+            
             var q = await httpClient.GetAsync(url);
             if(q.IsSuccessStatusCode)
             {
@@ -28,11 +45,5 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
                 StateHasChanged();
             }
         }
-        //async Task<Question> GetQuestion()
-        //{
-        //    QuestionText = "Vad heter Egyptens motsvarighet till Hesa Fredrik?";
-        //    Answer = "Tutan Khamon..";
-        //    return question;
-        //}
     }
 }
