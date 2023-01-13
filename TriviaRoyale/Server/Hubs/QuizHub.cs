@@ -15,8 +15,23 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.All.SendAsync("NewPlayer", player);
         }
 
+        //public async Task AnswerPlayer(string playerName)
+        //{
+        //    await Clients.All.SendAsync("StateChange", playerName, GameState.PlayerToAnswer);
+
+        //}
+
+        public async Task PlayerClick(string name)
+        {
+
+            await Clients.All.SendAsync("PlayerIsAnswering", name,GameState.PlayerToAnswer);
+
+
+        }
+
         public async Task AnswerButton1()
         {
+
             await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
 
         }
@@ -48,21 +63,21 @@ namespace TriviaRoyale.Server.Hubs
             return base.OnConnectedAsync();
         }
 
-		public async Task JoinRoom(string roomName)
-		{
-			await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+        public async Task JoinRoom(string roomName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
 
-			await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
-		}
+            await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
+        }
 
-		public async Task LeaveRoom(string roomName)
-		{
-			await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+        public async Task LeaveRoom(string roomName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
 
-			await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has left the group {roomName}.");
-		}
+            await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has left the group {roomName}.");
+        }
 
-		public async Task SendMessageToRoom(string roomName, string message)
+        public async Task SendMessageToRoom(string roomName, string message)
         {
             await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"Message: {message}");
         }

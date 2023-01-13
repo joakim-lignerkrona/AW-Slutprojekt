@@ -1,13 +1,41 @@
 ﻿@inject PlayerService service;
 
 
-<h3>PlayerToAnswer: @service.Player.Name</h3>
-<p>Points: @service.Player.Points</p>
-<p>RoomID: @service.Player.RoomID</p>
 <button class="btn btn-primary p-2" type="submit" @onclick="GameEnded" @onclick:preventDefault>Simulate Game Over</button>
 <button class="btn btn-primary p-2" type="submit" @onclick="NewQuestion" @onclick:preventDefault>Simulate New Question</button>
 
+@if(isAnswering)
+{
+	
+<h3>PlayerToAnswer: @service.Player.Name</h3>
+<p>Points: @service.Player.Points</p>
+<p>RoomID: @service.Player.RoomID</p>
+
+}
+else
+{
+	<h1>Wait while @service.NameOfClicker is answering </h1>
+}
+
 @code {
+
+	public bool isAnswering { get; set; } = false;
+
+	
+
+	protected override void OnInitialized()
+	{
+		if (service.Player.Name == service.NameOfClicker)
+		{
+			isAnswering = true;
+		}
+		else
+			isAnswering = false;
+
+			StateHasChanged();
+
+		base.OnInitialized();
+	}
 
 
 	private async Task NewQuestion()

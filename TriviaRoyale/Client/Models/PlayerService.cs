@@ -6,6 +6,8 @@ namespace TriviaRoyale.Client.Models
 {
     public class PlayerService
     {
+
+        public string NameOfClicker { get; set; }
         public Player Player { get; set; }
         public string RoomID { get; set; }
         public GameState GameState { get; set; } = GameState.Lobby;
@@ -21,11 +23,27 @@ namespace TriviaRoyale.Client.Models
                 .WithUrl(Navigation.BaseUri + "Quiz")
                 .Build();
 
+            hubConnection.On<string>("ClickerName", (btn) =>
+            {
+                NameOfClicker = btn;
+                NotifyStateChanged();
+            });
+
+            hubConnection.On<string, GameState>("PlayerIsAnswering", (playerName, state) =>
+            {
+                GameState = state;
+                NameOfClicker = playerName;
+                NotifyStateChanged();
+            });
+
+
+
             hubConnection.On<Player>("NewPlayer", (player) =>
             {
                 Players.Add(player);
                 NotifyStateChanged();
             });
+
             hubConnection.On<GameState>("StateChange", (state) =>
             {
                 GameState = state;
@@ -44,7 +62,7 @@ namespace TriviaRoyale.Client.Models
 
         public async ValueTask DisposeAsync()
         {
-            if(hubConnection is not null)
+            if (hubConnection is not null)
             {
                 await hubConnection.DisposeAsync();
             }
