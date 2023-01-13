@@ -21,7 +21,7 @@ namespace TriviaRoyale.Client.Models
 
         public List<Player> Players { get; set; } = new();
         public GameState GameState { get; protected set; }
-        public string PlayerAnswering { get; set; }
+        public Player PlayerAnswering { get; set; }
         public HubConnection? hubConnection;
         public event Action OnChange;
         protected void NotifyStateChanged() => OnChange?.Invoke();
@@ -39,7 +39,7 @@ namespace TriviaRoyale.Client.Models
                 Players = players.ToList();
                 NotifyStateChanged();
             });
-            hubConnection.On<string, GameState>("PlayerIsAnswering", (playerName, state) =>
+            hubConnection.On<Player, GameState>("PlayerIsAnswering", (playerName, state) =>
             {
 
                 GameState = state;

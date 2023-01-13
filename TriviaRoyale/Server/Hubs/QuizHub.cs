@@ -35,8 +35,7 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task PlayerClick(string name)
         {
-
-            await Clients.All.SendAsync("PlayerIsAnswering", name,GameState.PlayerToAnswer);
+            await Clients.All.SendAsync("PlayerIsAnswering", name, GameState.PlayerToAnswer);
 
 
         }
@@ -96,12 +95,12 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has left the group {roomName}.");
         }
 
-		public async Task SendMessageToRoom(string roomName, string message)
-		{
-			await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"Message: {message}");
-		}
+        public async Task SendMessageToRoom(string roomName, string message)
+        {
+            await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"Message: {message}");
+        }
 
-		
+
 
 
     }
