@@ -1,10 +1,17 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using TriviaRoyale.Server.Models;
 using TriviaRoyale.Shared;
 
 namespace TriviaRoyale.Server.Hubs
 {
     public class QuizHub : Hub
     {
+        public RoomService Service { get; }
+
+        public QuizHub(RoomService service)
+        {
+            Service = service;
+        }
         public async Task SendAnswer(string answer)
         {
             await Clients.All.SendAsync("ReceiveAnswer", answer);
@@ -12,14 +19,40 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task CreatePlayer(Player player)
         {
-            await Clients.All.SendAsync("NewPlayer", player);
+            player.SocketID = Context.ConnectionId;
+            Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
+            await Groups.AddToGroupAsync(player.SocketID, player.RoomID);
+            await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+
+
+        }
+
+        //public async Task AnswerPlayer(string playerName)
+        //{
+        //    await Clients.All.SendAsync("StateChange", playerName, GameState.PlayerToAnswer);
+
+        //}
+
+        public async Task PlayerClick(string name)
+        {
+
+            await Clients.All.SendAsync("PlayerIsAnswering", name,GameState.PlayerToAnswer);
+
+
         }
 
         public async Task AnswerButton1()
         {
+
             await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
 
         }
+        public async Task GetConnectedPlayers(string roomName)
+        {
+            await Clients.User(Context.UserIdentifier).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
+
+        }
+
         public async Task AnswerButton2()
         {
             await Clients.All.SendAsync("StateChange", GameState.OpponentToAnswer);

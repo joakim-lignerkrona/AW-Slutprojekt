@@ -6,6 +6,8 @@ namespace TriviaRoyale.Shared
 	{
 		public static int createdPlayers;
 		public string RoomID { get; set; }
+		public string SocketID { get; set; }
+
 		public int Points { get; set; }
 
 		[Required(ErrorMessage = "You must enter a name")]
