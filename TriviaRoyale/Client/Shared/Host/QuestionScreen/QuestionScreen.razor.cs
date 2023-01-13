@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Text.Json;
+using TriviaRoyale.Shared;
 using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
@@ -8,18 +9,42 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
     {
         [Parameter]
         public Question question { get; set; }
+        public bool CorrectAnswer { get; set; }
 
         async protected override void OnInitialized()
         {
-            //TODO
-            //Fixa så att inte samma fråga kommer två gånger
-            //GetRandomQuestion();
-            //Flytta ut nedan till metoden.
+            await GetQuestion();
+        }        
+
+        private void PlayerGuess(Question question)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task PlayerGuess()
+        {
+            if (CorrectAnswer)
+            {
+                service.playerAnswering.Points++;
+                //Koppla samman detta med listan av players?
+                //Vänta på knapptryck av hosten för att komma tillbax
+            }
+            else
+            {
+                //Se till att denna spelare inte får gissa på DENNA frågan igen.
+                //Vänta på knapptryck av hosten för att komma tillbax (igen)? eller? Countdown kanske?
+                await PlayerGuess();
+            }
+
+        }
+
+        async Task GetQuestion()
+        {
             string url = navigation.BaseUri + "API/Question/";
             HttpClient httpClient = new();
 
             var q = await httpClient.GetAsync(url);
-            if(q.IsSuccessStatusCode)
+            if (q.IsSuccessStatusCode)
             {
                 // Read the response content
                 var content = await q.Content.ReadAsStringAsync();
@@ -28,11 +53,5 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
                 StateHasChanged();
             }
         }
-        //async Task<Question> GetQuestion()
-        //{
-        //    QuestionText = "Vad heter Egyptens motsvarighet till Hesa Fredrik?";
-        //    Answer = "Tutan Khamon..";
-        //    return question;
-        //}
     }
 }
