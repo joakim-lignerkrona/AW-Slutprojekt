@@ -38,5 +38,6 @@
 
         await service.hubConnection.SendAsync("CreatePlayer", player);
         service.Player = player;
+        //await service.hubConnection.InvokeAsync("JoinRoom", RoomID); Trying to add player to the group/room
     }
 }
