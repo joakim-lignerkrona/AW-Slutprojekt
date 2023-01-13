@@ -3,13 +3,10 @@ using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Server.Models
 {
+
     public class DataService
     {
-        //public List<QandA> ListOfQAndA { get; set; }
-
-        //ListOfQAndA i framtiden..
-        //ListOfQAndA = questionController.GetList();
-
+        List<int> usedNumbers { get; set; } = new List<int>();
         List<Question> questions;
 
         public DataService()
@@ -27,10 +24,23 @@ namespace TriviaRoyale.Server.Models
         }
         public Question GetQuestion()
         {
-            Random random = new Random();
-            int r = random.Next(1, questions.Count);
+            int r = GetRandomNumber();
+
+            if (usedNumbers.Any(n => n == r))
+            {
+                GetQuestion();
+            }
+            usedNumbers.Add(r);
             return GetRandomQuestion(r);
         }
+
+        private int GetRandomNumber()
+        {
+            Random random = new Random();
+            int r = random.Next(1, questions.Count);
+            return r;
+        }
+
         private Question GetRandomQuestion(int r) => questions[r];
     }
 }

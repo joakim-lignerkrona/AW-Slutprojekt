@@ -42,15 +42,6 @@ namespace TriviaRoyale.Server.Controllers
 
         [HttpGet("Next")]
         public Question GetQuestion() => service.GetQuestion();
-     
-
-
-        //SERVER SIDE
-        //private void InsertList(List<QandA> list) 
-        //{
-        //    Hitta connection strängen!
-
-        //}
 
     }
 }
