@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client;
+
+@inject PlayerService service;
+
+<p>@service.Player.Name</p>
+<p>@service.NameOfClicker</p>
+
+
+
+<div class="d-flex flex-column justify-content-center align-items-center" style="height: 96vh;">
+
+	<h3 class="mb-5">Press the button when you know the answer</h3>
+	<div class="w-100 flex-grow-1">
+
+		<button class="btn w-100 btn-primary p-3" style="height: 100%" @onclick="WhoClicked">
+			<span class="h1">ANSWER</span>
+		</button>
+	</div>
+</div>
+
+@*Lägg till metod som skickar ett meddelande till servern om vem som tryckte på knappen först.*@
+
+@code {
+
+
+
+    private async Task WhoClicked()
+    {
+        var playerName = service.Player.Name;
+        await service.hubConnection.SendAsync("PlayerClick", playerName);
+
+
+        
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        service.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        service.OnChange -= StateHasChanged;
+    }
+
+    //ClickerName
+
+
+
+    //private async Task Answer()
+    //{
+    //    var playerName = service.Player.Name;
+    //    await service.hubConnection.SendAsync("AnswerPlayer", playerName);
+    //}
+
+    //private async Task Answer()
+    //{
+    //    Random rand = new Random();
+    //    int choice = rand.Next(1, 3);
+
+    //    if (choice == 1)
+    //    {
+    //        await service.hubConnection.SendAsync("AnswerButton1");
+    //    }
+    //    else
+    //    {
+    //        await service.hubConnection.SendAsync("AnswerButton2");
+    //    }
+    //}
+	//@*All kod ligger i Playing.razor.cs*@
+}
+

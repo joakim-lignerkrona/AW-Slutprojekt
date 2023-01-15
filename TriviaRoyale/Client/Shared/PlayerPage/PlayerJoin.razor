@@ -1,0 +1,43 @@
+﻿@using TriviaRoyale.Shared;
+@using TriviaRoyale.Client;
+@inject NavigationManager Navigation
+@inject PlayerService service;
+
+
+
+
+<div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+    <form>
+        <div>
+            <label for="name">Name:</label>
+            <input class="form-control mb-2" type="text" id="name" @bind="player.Name" />
+        </div>
+        <p class="text-danger" style="display:@(ErrorMessageVisibility ? "block" : "none")">Name is required</p>
+        <button class="btn btn-primary p-2" type="submit" @onclick="CreatePlayer" @onclick:preventDefault>READY</button>
+    </form>
+</div>
+
+
+@code {
+    [Parameter]
+    public string RoomID { get; set; }
+    private Player player = new Player();
+    private bool ErrorMessageVisibility { get; set; } = false;
+
+
+    private async Task CreatePlayer()
+    {
+
+        if (string.IsNullOrEmpty(player.Name))
+        {
+            ErrorMessageVisibility = true;
+            return;
+        }
+        ErrorMessageVisibility = false;
+        player.RoomID = RoomID;
+
+        await service.hubConnection.SendAsync("CreatePlayer", player);
+        service.Player = player;
+        //await service.hubConnection.InvokeAsync("JoinRoom", RoomID); Trying to add player to the group/room
+    }
+}

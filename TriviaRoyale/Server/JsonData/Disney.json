@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "questionText": "What is the name of the princess in Sleeping Beauty?",
+      "answer": "Princess Aurora"
+    },
+    {
+      "questionText": "In The Lion King, what is the name of Simba's mother?",
+      "answer": "Sarabi"
+    },
+    {
+      "questionText": "What is the name of the friendly ghost in Disney's Haunted Mansion ride?",
+      "answer": "Gus"
+    },
+    {
+      "questionText": "What is the name of the pirate captain in the Pirates of the Caribbean ride?",
+      "answer": "Captain Jack Sparrow"
+    },
+    {
+      "questionText": "In The Little Mermaid, what is the name of Ariel's best friend?",
+      "answer": "Flounder"
+    }
+  ]
+}
