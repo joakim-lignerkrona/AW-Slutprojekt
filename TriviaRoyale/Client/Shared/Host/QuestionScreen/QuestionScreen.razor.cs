@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using System.Text.Json;
 using TriviaRoyale.Shared.Questions;
 
@@ -10,11 +11,13 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         [Parameter]
         public bool CorrectAnswer { get; set; }
+        public List<Question> questions { get; set; }
         public Question question { get; set; }
+
 
         async protected override void OnInitialized()
         {
-            await GetQuestion();
+            await GetQuestions();
         }
 
         private void PlayerGuess(Question question)
@@ -39,9 +42,9 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         }
 
-        async Task GetQuestion()
+        async Task GetQuestions()
         {
-            string url = navigation.BaseUri + "API/Question/";
+            string url = navigation.BaseUri + "api/Questions/";
             HttpClient httpClient = new();
 
             var q = await httpClient.GetAsync(url);
@@ -50,15 +53,31 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
                 // Read the response content
                 var content = await q.Content.ReadAsStringAsync();
                 //// Deserialize the content into an object
-                question = JsonSerializer.Deserialize<Question>(content);
+                ///
+                var json = JsonSerializer.Deserialize<Question[]>(content);
+                questions = json.ToList();
                 StateHasChanged();
             }
         }
 
-        async Task EndGame()
+        async Task GetQuestion()
         {
-            await service.hubConnection.SendAsync("EndGame");
+            var index = Random.Shared.Next(0, questions.Count);
+            question = questions[index];
+            questions.RemoveAt(index);
         }
 
+        async Task EndGame()
+        {
+            await service.hubConnection.InvokeAsync("EndOfGame");
+        }
+        async Task HandleWrongAnswer()
+        {
+            await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
+        }
+        async Task HandleCorrectAnswer()
+        {
+            await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
+        }
     }
 }

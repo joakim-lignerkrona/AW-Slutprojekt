@@ -2,24 +2,24 @@
 
 namespace TriviaRoyale.Shared
 {
-	public class Player
-	{
-		public static int createdPlayers;
-		public string RoomID { get; set; }
-		public string SocketID { get; set; }
+    public class Player
+    {
+        public static int createdPlayers;
+        public string ID { get; set; }
+        public string RoomID { get; set; }
 
-		public int Points { get; set; }
+        public int Points { get; set; }
 
-		[Required(ErrorMessage = "You must enter a name")]
-		public string Name { get; set; }
+        [Required(ErrorMessage = "You must enter a name")]
+        public string Name { get; set; }
 
-		public Player()
-		{
-			createdPlayers++;
-		}
-		public Player(string name)
-		{
-			this.Name = name;
-		}
-	}
+        public Player()
+        {
+            createdPlayers++;
+        }
+        public Player(string name)
+        {
+            this.Name = name;
+        }
+    }
 }
