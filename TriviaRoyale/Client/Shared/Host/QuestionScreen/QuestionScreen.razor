@@ -1,0 +1,50 @@
+﻿@using TriviaRoyale.Shared;
+@using TriviaRoyale.Client.Models;
+@using System.Text.Json;
+@using TriviaRoyale.Shared.Questions
+@inject NavigationManager navigation
+@inject HostService service
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="d-flex justify-content-between">
+            <div class="col-6">
+                <h3>Question</h3>
+                <p>
+                    @question?.questionText
+                </p>
+                <p>
+                    @question?.answer
+
+                </p>
+            </div>
+            <div id="player-list" class="border-2 col-6">
+                @if (service.PlayerAnswering != null)
+                {
+                    <TriviaRoyale.Client.Shared.Components.PlayerComponent Player="service.PlayerAnswering">
+                        @*NU KOMMER VI TILL EN NY SVARA-SIDA*@
+                    </TriviaRoyale.Client.Shared.Components.PlayerComponent>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-around">
+            <button class="btn btn-warning p-5" @onclick="GetQuestion">
+                <span class="h3">
+                    New question
+                </span>
+            </button>
+            <button class="btn btn-danger p-5" @onclick="EndGame">
+                <span class="h3">
+                    End Game
+                </span>
+            </button>
+        </div>
+    </div> 
+</div>
+@code {
+    
+
+
+}
