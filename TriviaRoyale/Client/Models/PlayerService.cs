@@ -7,7 +7,7 @@ namespace TriviaRoyale.Client.Models
     public class PlayerService : DaddyService
     {
 
-        public string NameOfClicker { get; set; }
+
         public Player Player { get; set; }
 
         public PlayerService(NavigationManager Navigation) : base(Navigation)
@@ -16,16 +16,11 @@ namespace TriviaRoyale.Client.Models
 
             hubConnection.On<string>("ClickerName", (btn) =>
             {
-                NameOfClicker = btn;
+                PlayerAnswering = btn;
                 NotifyStateChanged();
             });
 
-            hubConnection.On<string, GameState>("PlayerIsAnswering", (playerName, state) =>
-            {
-                GameState = state;
-                NameOfClicker = playerName;
-                NotifyStateChanged();
-            });
+
 
 
         }
