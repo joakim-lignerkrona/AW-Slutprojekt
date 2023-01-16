@@ -22,11 +22,7 @@ namespace TriviaRoyale.Client.Models
 
 
 
-            hubConnection.On<GameState>("StateChange", (state) =>
-            {
-                GameState = state;
-                NotifyStateChanged();
-            });
+
         }
 
     }
