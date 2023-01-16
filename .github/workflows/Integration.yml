@@ -17,7 +17,7 @@ jobs:
           dotnet-version: ${{matrix.dotnet-version}}
       - name: Install dependencies
         run: |
-          systemctl --user restart triviaroyale.service
+          systemctl --user stop triviaroyale.service
           dotnet restore ./TriviaRoyale/Client/TriviaRoyale.Client.csproj
           dotnet restore ./TriviaRoyale/Server/TriviaRoyale.Server.csproj
       - name: Build
