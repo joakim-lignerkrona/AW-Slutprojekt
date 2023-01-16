@@ -43,9 +43,9 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.All.SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.ID).Players.ToArray());
         }
 
-        public async Task PlayerClick(string name)
+        public async Task PlayerClick(Player player)
         {
-            await Clients.All.SendAsync("PlayerIsAnswering", name, GameState.PlayerToAnswer);
+            await Clients.All.SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
         }
 
         public async Task AnswerButton1()
