@@ -14,11 +14,11 @@ namespace TriviaRoyale.Client.Models
         {
 
 
-            hubConnection.On<string>("ClickerName", (btn) =>
-            {
-                PlayerAnswering = btn;
-                NotifyStateChanged();
-            });
+            //hubConnection.On<string>("ClickerName", (btn) =>
+            //{
+            //    PlayerAnswering = btn;
+            //    NotifyStateChanged();
+            //});
 
 
 

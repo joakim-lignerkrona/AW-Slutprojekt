@@ -26,8 +26,8 @@
 
     private async Task WhoClicked()
     {
-        var playerName = service.Player.Name;
-        await service.hubConnection.SendAsync("PlayerClick", playerName);
+        
+        await service.hubConnection.SendAsync("PlayerClick", service.Player);
 
 
         
