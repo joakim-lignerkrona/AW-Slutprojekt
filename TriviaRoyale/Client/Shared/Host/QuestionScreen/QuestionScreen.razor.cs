@@ -23,12 +23,6 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             await GetQuestion();
         }
 
-        //DENNA SKA VI GÖRA tror jag.
-        private void PlayerGuess(Question question)
-        {
-            throw new NotImplementedException();
-        }
-
         private async Task PlayerGuess()
         {
             if(CorrectAnswer)
