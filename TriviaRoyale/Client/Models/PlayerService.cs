@@ -12,21 +12,11 @@ namespace TriviaRoyale.Client.Models
 
         public PlayerService(NavigationManager Navigation) : base(Navigation)
         {
-
-
-            hubConnection.On<string>("ClickerName", (btn) =>
-            {
-                PlayerAnswering = btn;
-                NotifyStateChanged();
-            });
-
-
-
             hubConnection.On<GameState>("StateChange", (state) =>
-            {
-                GameState = state;
-                NotifyStateChanged();
-            });
+    {
+        GameState = state;
+        NotifyStateChanged();
+    });
         }
 
     }
