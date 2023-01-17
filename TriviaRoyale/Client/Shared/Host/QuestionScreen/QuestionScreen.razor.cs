@@ -27,12 +27,13 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         {
             if (CorrectAnswer)
             {
-                service.playerAnswering.Points++;
+                service.PlayerAnswering.Points++;
                 //Koppla samman detta med listan av players?
-                //Vänta på knapptryck av hosten för att komma tillbax
             }
             else
             {
+
+                service.DiscardedPlayers.Add(service.PlayerAnswering);
                 //Se till att denna spelare inte får gissa på DENNA frågan igen.
                 //Vänta på knapptryck av hosten för att komma tillbax (igen)? eller? Countdown kanske?
                 await PlayerGuess();
