@@ -34,22 +34,17 @@
         <div class="form-group">
             <label for="emoji-selector">Select Emoji:</label>
             <br>
-            <div class="form-check form-check-inline" id="people">
-                <input class="btn-check" type="radio" name="emoji-selector" id="smiling_face" value="smiling_face">
-                <label class="btn btn-outline-primary h1" for="smiling_face">😀</label>
-            </div>
-            <div class="form-check form-check-inline" id="people">
-                <input class="btn-check" type="radio" name="emoji-selector" id="winking_face" value="winking_face">
-                <label class="btn btn-outline-primary h1" for="winking_face">😉</label>
-            </div>
-            <div class="form-check form-check-inline" id="people">
-                <input class="btn-check" type="radio" name="emoji-selector" id="thumbs_up" value="thumbs_up">
-                <label class="btn btn-outline-primary h1" for="thumbs_up">👍</label>
-            </div>
-            <div class="form-check form-check-inline" id="animals">
-                <input class="btn-check" type="radio" name="emoji-selector" id="dog" value="dog">
-                <label class="btn btn-outline-primary" for="dog">🐶</label>
-            </div>
+
+            @foreach (var emoji in emojis)
+            {
+                <div class="form-check form-check-inline">
+                    <input class="btn-check" type="radio" name="emoji-selector" id="emoji" value="emoji">
+                    <label class="btn btn-outline-primary h1" for="emoji">@emoji</label>
+                </div>
+            }
+
+
+
 
         </div>
 
@@ -71,13 +66,26 @@
     public string RoomID { get; set; }
     private Player player = new Player();
     private bool ErrorMessageVisibility { get; set; } = false;
-
+    string[] emojis = new string[] {
+"😃", "😉", "🤪", "🤨", "😋", "😏", "😫", "😳",
+"🤯", "🫠", "👻", "🤡", "👺", "🤖", "👽", "😺",
+"👶", "👧", "👩", "🧑", "👨", "👩‍🦱", "🧑‍🦱", "👨‍🦱",
+"🧑‍🦳", "👨‍🦳", "👮", "👷", "💂", "🕵️", "🧑‍⚕️", "🧑‍🌾",
+"🧑‍🍳", "🧑‍🎓", "👩‍🎤", "🧑‍🏫", "🧑‍💻", "🧑‍💼", "🧑‍🔧", "🧑‍🚀",
+"👰", "🦸", "🥷", "🦹", "🧝", "🧛", "🐶", "🐱",
+"🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨",
+"🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🍎", "🍐",
+"🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈",
+"🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆",
+"🥑", "🥦", "🌶️", "🌽", "🥕", "🫒", "🥐", "🥯",
+"🥖", "🌭", "🍔", "🍟", "🍕", "🌮", "🌯", "🍣",
+"🍤", "🍦", "🎂", "🍫", "🍿", "🍩"};
 
 
     private async Task CreatePlayer()
     {
 
-        if(string.IsNullOrEmpty(player.Name))
+        if (string.IsNullOrEmpty(player.Name))
         {
             ErrorMessageVisibility = true;
             return;
