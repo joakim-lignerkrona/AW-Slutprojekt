@@ -9,8 +9,21 @@
 
 <PageTitle>Trivia Royale</PageTitle>
 
+@switch(service.GameState)
+{
 
-<PlayerJoinScreen />
+    case GameState.Playing:
+    case GameState.PlayerToAnswer:
+        <TriviaRoyale.Client.Shared.Host.QuestionScreen.QuestionScreen />
+        break;
+    case GameState.Ended:
+        <TriviaRoyale.Client.Shared.Host.GameEnd />
+        break;
+    default:
+        <PlayerJoinScreen />
+        break;
+}
+
 
 
 

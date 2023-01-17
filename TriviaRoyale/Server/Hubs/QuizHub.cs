@@ -14,7 +14,7 @@ namespace TriviaRoyale.Server.Hubs
         }
         public async Task SendAnswer(string answer)
         {
-            await Clients.All.SendAsync("ReceiveAnswer", answer);
+            await Clients.Groups(GetRoomName()).SendAsync("ReceiveAnswer", answer);
         }
 
         public async Task CreatePlayer(Player player)
@@ -23,44 +23,38 @@ namespace TriviaRoyale.Server.Hubs
             Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
             await Groups.AddToGroupAsync(player.SocketID, player.RoomID);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
-
-
+            await Clients.Caller.SendAsync("PlayerCreated", player);
         }
 
-        //public async Task AnswerPlayer(string playerName)
-        //{
-        //    await Clients.All.SendAsync("StateChange", playerName, GameState.PlayerToAnswer);
 
-        //}
-
-        public async Task PlayerClick(string name)
+        public async Task WrongAnswer()
         {
-
-            await Clients.All.SendAsync("PlayerIsAnswering", name,GameState.PlayerToAnswer);
-
-
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
         }
-
-        public async Task AnswerButton1()
+        public async Task CorrectAnswer(Player player)
         {
-
-            await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
-
+            var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+            roomPlayer.Points++;
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+            await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
         }
+
+        public async Task PlayerClick(Player player)
+        {
+            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
+        }
+
+
         public async Task GetConnectedPlayers(string roomName)
         {
             await Clients.User(Context.UserIdentifier).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
 
         }
 
-        public async Task AnswerButton2()
-        {
-            await Clients.All.SendAsync("StateChange", GameState.OpponentToAnswer);
 
-        }
         public async Task StartGame()
         {
-            await Clients.All.SendAsync("StateChange", GameState.Playing);
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
         }
 
         public Task SendPrivateMessage(string user, string message)
@@ -71,7 +65,7 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task EndOfGame()
         {
-            await Clients.All.SendAsync("StateChange", GameState.Ended);
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Ended);
 
         }
         public override Task OnConnectedAsync()
@@ -84,6 +78,8 @@ namespace TriviaRoyale.Server.Hubs
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+
+
 
             await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
         }
@@ -103,7 +99,10 @@ namespace TriviaRoyale.Server.Hubs
         }
 
 
-
+        string GetRoomName()
+        {
+            return Service.rooms.Find(x => x.Players.Exists(y => y.ID == Context.ConnectionId)).Id;
+        }
 
     }
 }
