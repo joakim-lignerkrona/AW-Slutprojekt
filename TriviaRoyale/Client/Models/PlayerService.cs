@@ -13,14 +13,23 @@ namespace TriviaRoyale.Client.Models
         public PlayerService(NavigationManager Navigation) : base(Navigation)
         {
 
+            hubConnection.On<Player>("PlayerCreated", (player) =>
+            {
+                Player = player;
+                NotifyStateChanged();
+            });
 
-            //hubConnection.On<string>("ClickerName", (btn) =>
-            //{
-            //    PlayerAnswering = btn;
-            //    NotifyStateChanged();
-            //});
+            hubConnection.On<Player[]>("NewPlayer", (players) =>
+            {
+                Player = players.FirstOrDefault(p => p.ID == Player.ID);
+                NotifyStateChanged();
+            });
 
-
+            hubConnection.On<Player>("PlayerIsAnswering", (player) =>
+            {
+                PlayerAnswering = player;
+                NotifyStateChanged();
+            });
 
 
         }
