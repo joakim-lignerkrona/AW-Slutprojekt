@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using TriviaRoyale.Client.Shared.PlayerPage;
 using TriviaRoyale.Shared;
 
 namespace TriviaRoyale.Client.Models
@@ -17,28 +18,29 @@ namespace TriviaRoyale.Client.Models
             hubConnection.On<Player>("PlayerCreated", (player) =>
             {
                 Player = player;
+            });
 
-                hubConnection.On<string>("ClickerName", (btn) =>
-                {
-                    NameOfClicker = btn;
-                    NotifyStateChanged();
-                });
+            hubConnection.On<string>("ClickerName", (btn) =>
+            {
+                PlayerToAnswer = btn;
+                NotifyStateChanged();
+            });
 
-                hubConnection.On<string, GameState>("PlayerIsAnswering", (playerName, state) =>
-                {
-                    GameState = state;
-                    NameOfClicker = playerName;
-                    NotifyStateChanged();
-                });
+            hubConnection.On<string, GameState>("PlayerIsAnswering", (playerName, state) =>
+            {
+                GameState = state;
+                NameOfClicker = playerName;
+                NotifyStateChanged();
+            });
 
-                hubConnection.On<GameState>("StateChange", (state) =>
-                {
-                    GameState = state;
-                    NotifyStateChanged();
-                });
-            }
+            hubConnection.On<GameState>("StateChange", (state) =>
+            {
+                GameState = state;
+                NotifyStateChanged();
+            });
+        }
 
     }
 
-    }
+}
 
