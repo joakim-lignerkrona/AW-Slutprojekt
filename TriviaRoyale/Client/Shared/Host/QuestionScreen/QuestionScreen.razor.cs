@@ -66,6 +66,7 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             question = questions[index];
             questions.RemoveAt(index);
             service.ClearPlayerIsAnswering();
+            StateHasChanged();
         }
 
         async Task EndGame()
