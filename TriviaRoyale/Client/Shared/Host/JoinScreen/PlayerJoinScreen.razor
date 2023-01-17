@@ -2,7 +2,7 @@
 @using TriviaRoyale.Client.Shared.Components
 @inject HostService service;
 @inject NavigationManager navigation;
-<h3>PlayerJoinScreen</h3>
+
 
 <div class="container">
     <div class="row mb-5">
@@ -11,14 +11,14 @@
                 <a href="@(navigation.BaseUri + $"player/{service.RoomID}")" target="_blank">
                     @if (service.RoomID != null)
                     {
-                        <img class="img-fluid" src="@($"{navigation.BaseUri}qr/"+HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}"))" alt="QRcode with link to game" />
+                        <img class="img-fluid rounded-3" src="@($"{navigation.BaseUri}qr/"+HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}"))" alt="QRcode with link to game" />
                     }
                 </a>
             </div>
-            <div id="player-list" class="border-2 flex-grow-1 bg-dark p-3 rounded-4 col-6">
+            <div id="player-list" class="border-2 flex-grow-1 d-flex flex-column bg-dark p-3 rounded-4 col-6">
                 @if(!service.IsConnected)
                 {
-                    <div class="d-flex justify-content-center text-light">
+                    <div class="d-flex justify-content-center text-light ">
                         <h5 class="me-3">Connecting to server</h5>
                         <span class="spinner-border" role="status"></span>
                     </div>
@@ -33,19 +33,22 @@
                 }
                 else
                 {
-                    <div class="d-flex">
+                    <div class="d-flex flex-wrap overflow-hidden">
                         @foreach(var player in service.Players)
                         {
                             <PlayerComponent Player="player" />
                         }
                     </div>
-                    <div class="d-flex justify-content-center text-light">
+                    <div class="flex-grow-1 d-flex flex-column justify-content-evenly" > 
+
+                    <div class="d-flex justify-content-center text-light ">
                         <h5 class="me-3">Waiting for more players</h5>
                         <span class="spinner-border" role="status"></span>
                     </div>
                     <div class="d-flex justify-content-center text-light">
                         <h5 class="me-3">Press "Start Game" When everyone is ready</h5>
                         
+                    </div>
                     </div>
                 }
             </div>

@@ -1,4 +1,5 @@
-﻿@using TriviaRoyale.Shared;
+﻿@using System.Globalization;
+@using TriviaRoyale.Shared;
 @using TriviaRoyale.Client;
 @inject NavigationManager Navigation
 @inject PlayerService service;
@@ -7,7 +8,8 @@
 
 
 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
-    <form class="col-lg-6">
+    <h1 class="text-light">Create your player</h1>
+    <form class="col-lg-7 col-12 col-md-10 bg-light rounded-3 p-4">
 
         <div>
             <label for="name">Name:</label>
@@ -15,7 +17,7 @@
         </div>
         <p class="text-danger" style="display:@(ErrorMessageVisibility ? "block" : "none")">Name is required</p>
 
-        @*<div class="form-group">
+        <div class="form-group m-3">
             <label for="emoji-category">Select Emoji Category:</label>
             <br>
             <div class="form-check form-check-inline">
@@ -34,15 +36,15 @@
                 <input class="form-check-input" type="radio" id="activities" name="emoji-category" value="activities">
                 <label class="form-check-label" for="activities">Activities</label>
             </div>
-        </div>*@
-        <div class="form-group">
+        </div>
             <label for="emoji-selector">Select Emoji:</label>
             <br>
+        <div class="form-group emoji-selector m-3">
 
 
             @for(int i = 0; i < emojis.Length; i++)
             {
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline my-2">
                     <input class="btn-check" type="radio" name="emoji-selector" id=@($"emoji{i}") value=@(i) @onchange="SelectedEmoji">
                     <label class="btn btn-outline-primary" for=@($"emoji{i}")><span class="h1">@emojis[i]</span>   </label>
                 </div>
@@ -86,6 +88,7 @@
             return;
         }
         ErrorMessageVisibility = false;
+        player.Name = FixNamingCasing(player.Name);
         player.RoomID = RoomID;
 
         await service.hubConnection.SendAsync("CreatePlayer", player);
@@ -98,5 +101,20 @@
         Console.WriteLine(emojis[index]);
         player.Emoji = emojis[index];
         StateHasChanged();
+    }
+    string FixNamingCasing(string name)
+    {
+        
+        char[] chars = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()).ToCharArray();
+
+        for(int i = 0; i + 1 < chars.Length; i++)
+        {
+            if((chars[i].Equals('\'')) ||
+                (chars[i].Equals('-')))
+            {
+                chars[i + 1] = Char.ToUpper(chars[i + 1]);
+            }
+        }
+        return new string(chars);
     }
 }
