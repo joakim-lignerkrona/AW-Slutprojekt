@@ -7,9 +7,13 @@
 
 
 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
-    <form>
+    <form class="col-lg-6">
 
-
+        <div>
+            <label for="name">Name:</label>
+            <input class="form-control mb-2" type="text" id="name" @bind="player.Name" />
+        </div>
+        <p class="text-danger" style="display:@(ErrorMessageVisibility ? "block" : "none")">Name is required</p>
 
         <div class="form-group">
             <label for="emoji-category">Select Emoji Category:</label>
@@ -35,27 +39,17 @@
             <label for="emoji-selector">Select Emoji:</label>
             <br>
 
-            @foreach (var emoji in emojis)
+
+            @for(int i = 0; i < emojis.Length; i++)
             {
                 <div class="form-check form-check-inline">
-                    <input class="btn-check" type="radio" name="emoji-selector" id="emoji" value="emoji">
-                    <label class="btn btn-outline-primary h1" for="emoji">@emoji</label>
+                    <input class="btn-check" type="radio" name="emoji-selector" id=@($"emoji{i}") value=@(i) @onchange="SelectedEmoji">
+                    <label class="btn btn-outline-primary" for=@($"emoji{i}")><span class="h1">@emojis[i]</span>   </label>
                 </div>
             }
 
-
-
-
         </div>
 
-
-
-
-        <div>
-            <label for="name">Name:</label>
-            <input class="form-control mb-2" type="text" id="name" @bind="player.Name" />
-        </div>
-        <p class="text-danger" style="display:@(ErrorMessageVisibility ? "block" : "none")">Name is required</p>
         <button class="btn btn-primary p-2" type="submit" @onclick="CreatePlayer" @onclick:preventDefault>READY</button>
     </form>
 </div>
@@ -65,12 +59,13 @@
     [Parameter]
     public string RoomID { get; set; }
     private Player player = new Player();
+    public int emojiIndex { get; set; } = 0;
     private bool ErrorMessageVisibility { get; set; } = false;
     string[] emojis = new string[] {
 "😃", "😉", "🤪", "🤨", "😋", "😏", "😫", "😳",
 "🤯", "🫠", "👻", "🤡", "👺", "🤖", "👽", "😺",
 "👶", "👧", "👩", "🧑", "👨", "👩‍🦱", "🧑‍🦱", "👨‍🦱",
-"🧑‍🦳", "👨‍🦳", "👮", "👷", "💂", "🕵️", "🧑‍⚕️", "🧑‍🌾",
+"🧑‍🦳", "👨‍🦳", "👮", "👷", "💂", "🕵", "🧑‍⚕", "🧑‍🌾",
 "🧑‍🍳", "🧑‍🎓", "👩‍🎤", "🧑‍🏫", "🧑‍💻", "🧑‍💼", "🧑‍🔧", "🧑‍🚀",
 "👰", "🦸", "🥷", "🦹", "🧝", "🧛", "🐶", "🐱",
 "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨",
@@ -95,5 +90,13 @@
 
         await service.hubConnection.SendAsync("CreatePlayer", player);
 
+    }
+    void SelectedEmoji(ChangeEventArgs arg)
+    {
+        int index;
+        int.TryParse(arg.Value.ToString(), out index);
+        Console.WriteLine(emojis[index]);
+        player.Emoji = emojis[index];
+        StateHasChanged();
     }
 }

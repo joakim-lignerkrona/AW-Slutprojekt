@@ -1,0 +1,6 @@
+﻿body {
+}
+
+div {
+    min-width: calc(33% - 1rem);
+}
