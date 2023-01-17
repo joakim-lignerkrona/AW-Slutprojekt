@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using TriviaRoyale.Server.Models;
-using TriviaRoyale.Shared;
-
-namespace TriviaRoyale.Server.Hubs
+﻿namespace TriviaRoyale.Server.Hubs
 {
     public class QuizHub : Hub
     {
@@ -19,9 +15,9 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task CreatePlayer(Player player)
         {
-            player.SocketID = Context.ConnectionId;
+            player.ID = Context.ConnectionId;
             Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
-            await Groups.AddToGroupAsync(player.SocketID, player.RoomID);
+            await Groups.AddToGroupAsync(player.ID, player.RoomID);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await Clients.Caller.SendAsync("PlayerCreated", player);
         }

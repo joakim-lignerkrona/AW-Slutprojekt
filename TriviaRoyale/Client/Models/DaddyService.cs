@@ -7,6 +7,7 @@ namespace TriviaRoyale.Client.Models
     public class DaddyService
     {
         private string roomID;
+        public GameState GameState { get; set; } = GameState.Lobby;
 
         public string RoomID
         {
@@ -20,6 +21,9 @@ namespace TriviaRoyale.Client.Models
 
 
         public List<Player> Players { get; set; } = new();
+
+        public Player PlayerAnswering { get; set; }
+
         public HubConnection? hubConnection;
         public event Action OnChange;
         protected void NotifyStateChanged() => OnChange?.Invoke();
@@ -37,8 +41,31 @@ namespace TriviaRoyale.Client.Models
                 Players = players.ToList();
                 NotifyStateChanged();
             });
+            hubConnection.On<Player, GameState>("PlayerIsAnswering", (player, state) =>
+            {
+
+                GameState = state;
+                PlayerAnswering = player;
+                NotifyStateChanged();
+            });
 
             hubConnection.On<string>("ServerLog", Console.WriteLine);
+            hubConnection.On<string>("PlayerIsAnswering", (playerID) =>
+            {
+                PlayerAnswering = Players.FirstOrDefault(p => p.ID == playerID);
+                NotifyStateChanged();
+            });
+            hubConnection.On("OpenQuestion", () =>
+            {
+                PlayerAnswering = null;
+                NotifyStateChanged();
+            });
+            hubConnection.On<GameState>("StateChange", (state) =>
+            {
+                GameState = state;
+                NotifyStateChanged();
+            });
+
         }
 
         public async Task ConnectAsync()

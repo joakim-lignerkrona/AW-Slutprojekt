@@ -1,9 +1,9 @@
 ﻿@inject PlayerService service;
 
 
-<button class="btn btn-primary p-2" type="submit" @onclick="GameEnded" @onclick:preventDefault>Simulate Game Over</button>
+@*<button class="btn btn-primary p-2" type="submit" @onclick="GameEnded" @onclick:preventDefault>Simulate Game Over</button>
 <button class="btn btn-primary p-2" type="submit" @onclick="NewQuestion" @onclick:preventDefault>Simulate New Question</button>
-
+*@
 @if(isAnswering)
 {
 	
@@ -14,7 +14,7 @@
 }
 else
 {
-	<h1>Wait while @service.NameOfClicker is answering </h1>
+	<h1>Wait while @service.PlayerAnswering is answering </h1>
 }
 
 @code {
@@ -25,7 +25,7 @@ else
 
 	protected override void OnInitialized()
 	{
-		if (service.Player.Name == service.NameOfClicker)
+		if (service.Player.Name == service.PlayerAnswering.Name)
 		{
 			isAnswering = true;
 		}

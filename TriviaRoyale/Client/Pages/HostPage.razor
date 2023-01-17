@@ -1,4 +1,5 @@
 ﻿@page "/Host/{RoomId}"
+@using TriviaRoyale.Shared;
 
 @inject HostService service;
 
@@ -17,7 +18,7 @@
         <TriviaRoyale.Client.Shared.Host.QuestionScreen.QuestionScreen />
         break;
     case GameState.Ended:
-        <TriviaRoyale.Client.Shared.Host.GameEnd />
+
         break;
     default:
         <PlayerJoinScreen />
