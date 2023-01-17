@@ -35,7 +35,7 @@ else
 
 <h2>Result:</h2>
 
-@foreach(var player in service.Players)
+@foreach (var player in service.Players.OrderByDescending(p => p.Points))
 {
 
 
