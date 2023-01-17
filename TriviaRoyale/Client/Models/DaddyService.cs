@@ -65,11 +65,7 @@ namespace TriviaRoyale.Client.Models
                 GameState = state;
                 NotifyStateChanged();
             });
-            hubConnection.On<Player[]>("NewPlayer", (players) =>
-            {
-                Player = players.FirstOrDefault(p => p.ID == Player.ID);
-                NotifyStateChanged();
-            });
+
         }
 
         public async Task ConnectAsync()
