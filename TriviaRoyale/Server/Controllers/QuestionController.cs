@@ -4,7 +4,7 @@ using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace TriviaRoyale.Server.Controllers
         }
 
         //CLIENT SIDE
-        [HttpGet("")]
+        [HttpGet("questions")]
         public Question[] GetList()
         {
 

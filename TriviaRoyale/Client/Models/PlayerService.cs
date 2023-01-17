@@ -17,6 +17,10 @@ namespace TriviaRoyale.Client.Models
         GameState = state;
         NotifyStateChanged();
     });
+            {
+                GameState = state;
+                NotifyStateChanged();
+            });
         }
 
     }
