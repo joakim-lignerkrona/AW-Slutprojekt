@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Text.Json;
+using TriviaRoyale.Shared;
 using TriviaRoyale.Shared.Questions;
 
 
@@ -17,9 +18,12 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         async protected override void OnInitialized()
         {
+            service.GameRoundPlayers = service.Players;
             await GetQuestions();
+            await GetQuestion();
         }
 
+        //DENNA SKA VI GÖRA tror jag.
         private void PlayerGuess(Question question)
         {
             throw new NotImplementedException();
@@ -35,13 +39,11 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             }
             else
             {
-
-                service.DiscardedPlayers.Add(service.PlayerAnswering);
+                service.GameRoundPlayers.Remove(service.PlayerAnswering);
                 //Se till att denna spelare inte får gissa på DENNA frågan igen.
                 //Vänta på knapptryck av hosten för att komma tillbax (igen)? eller? Countdown kanske?
                 await PlayerGuess();
             }
-
         }
 
         async Task GetQuestions()
@@ -72,14 +74,22 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         async Task EndGame()
         {
             await service.hubConnection.InvokeAsync("EndOfGame");
+            //Visa upp lista på spelare och deras poäng
         }
         async Task HandleWrongAnswer()
         {
             await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
+            //Spelaren som gissade fel får inte svara igen på DENNA fråga.
+            service.GameRoundPlayers.Remove(service.PlayerAnswering);
+            
+            //Köra samma fråga igen
+
         }
         async Task HandleCorrectAnswer()
         {
+            service.PlayerAnswering.Points++;
             await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
+            //Vänta på att spelledaren trycker på ny fråga. / Kanske vill cleara rutan?
         }
     }
 }

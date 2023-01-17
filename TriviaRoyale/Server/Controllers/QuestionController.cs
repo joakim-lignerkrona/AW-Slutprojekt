@@ -36,12 +36,11 @@ namespace TriviaRoyale.Server.Controllers
         [HttpGet("questions")]
         public Question[] GetList()
         {
-
             return service.GetQuestions();
         }
 
-        [HttpGet("Next")]
-        public Question GetQuestion() => service.GetQuestion();
+        //[HttpGet("Next")]
+        //public Question GetQuestion() => service.GetQuestion();
 
     }
 }

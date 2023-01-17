@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "questionText": "Här är fråga ett",
+      "answer": "Svaret"
+    },
+    {
+      "questionText": "Här är fråga två",
+      "answer": "Svaret"
+    },
+    {
+      "questionText": "Fråga tre..",
+      "answer": "guh"
+    },
+    {
+      "questionText": "Fråga fyra?",
+      "answer": "Meh"
+    },
+    {
+      "questionText": "Meeeeeeeeeeeeeh?",
+      "answer": "mehbe"
+    }
+  ]
+}

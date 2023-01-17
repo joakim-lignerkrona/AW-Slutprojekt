@@ -22,25 +22,5 @@ namespace TriviaRoyale.Server.Models
 
             return questions.ToArray();
         }
-        public Question GetQuestion()
-        {
-            int r = GetRandomNumber();
-
-            if (usedNumbers.Any(n => n == r))
-            {
-                GetQuestion();
-            }
-            usedNumbers.Add(r);
-            return GetRandomQuestion(r);
-        }
-
-        private int GetRandomNumber()
-        {
-            Random random = new Random();
-            int r = random.Next(1, questions.Count);
-            return r;
-        }
-
-        private Question GetRandomQuestion(int r) => questions[r];
     }
 }
