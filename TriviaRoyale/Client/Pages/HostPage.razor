@@ -5,12 +5,13 @@
 
 @inject HostService service;
 
+<PageTitle>Host - Quiz my app</PageTitle>
 
 
 
 
+<div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark">
 
-<PageTitle>Trivia Royale</PageTitle>
 
 @switch(service.GameState)
 {
@@ -27,6 +28,7 @@
         break;
 }
 
+</div>
 
 
 
