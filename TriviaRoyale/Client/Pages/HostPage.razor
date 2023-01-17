@@ -1,5 +1,7 @@
 ﻿@using TriviaRoyale.Client.Shared.Host
 @page "/Host/{RoomId}"
+@using TriviaRoyale.Client.Shared.Host
+@using TriviaRoyale.Client.Shared.Host.QuestionScreen
 @using TriviaRoyale.Shared;
 
 @inject HostService service;
@@ -16,10 +18,10 @@
 
     case GameState.Playing:
     case GameState.PlayerToAnswer:
-        <TriviaRoyale.Client.Shared.Host.QuestionScreen.QuestionScreen />
+        <QuestionScreen />
         break;
     case GameState.Ended:
-
+        <HostEnd />
         break;
     default:
         <PlayerJoinScreen />

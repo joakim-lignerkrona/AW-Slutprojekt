@@ -14,60 +14,46 @@ namespace TriviaRoyale.Server.Hubs
         }
         public async Task SendAnswer(string answer)
         {
-            await Clients.All.SendAsync("ReceiveAnswer", answer);
+            await Clients.Groups(GetRoomName()).SendAsync("ReceiveAnswer", answer);
         }
 
         public async Task CreatePlayer(Player player)
         {
             player.ID = Context.ConnectionId;
             Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
-            await Groups.AddToGroupAsync(player.ID, player.RoomID);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
-
-
+            await Clients.Caller.SendAsync("PlayerCreated", player);
         }
 
-        //public async Task AnswerPlayer(string playerName)
-        //{
-        //    await Clients.All.SendAsync("StateChange", playerName, GameState.PlayerToAnswer);
 
-        //}
-        public async Task WrongAnswer()
+        public async Task WrongAnswer(Player player)
         {
-            await Clients.All.SendAsync("StateChange", GameState.Playing);
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
         }
         public async Task CorrectAnswer(Player player)
         {
-            Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID).Points++;
-            await Clients.All.SendAsync("StateChange", GameState.Playing);
-            await Clients.All.SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.ID).Players.ToArray());
+            var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+            roomPlayer.Points++;
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+            await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
         }
 
         public async Task PlayerClick(Player player)
         {
-            await Clients.All.SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
+            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
         }
 
-        public async Task AnswerButton1()
-        {
 
-            await Clients.All.SendAsync("StateChange", GameState.PlayerToAnswer);
-
-        }
         public async Task GetConnectedPlayers(string roomName)
         {
             await Clients.User(Context.UserIdentifier).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
 
         }
 
-        public async Task AnswerButton2()
-        {
-            await Clients.All.SendAsync("StateChange", GameState.OpponentToAnswer);
 
-        }
         public async Task StartGame()
         {
-            await Clients.All.SendAsync("StateChange", GameState.Playing);
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
         }
 
         public Task SendPrivateMessage(string user, string message)
@@ -78,7 +64,7 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task EndOfGame()
         {
-            await Clients.All.SendAsync("StateChange", GameState.Ended);
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Ended);
 
         }
         public override Task OnConnectedAsync()
@@ -90,7 +76,14 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task JoinRoom(string roomName)
         {
+            var room = Service.rooms.FirstOrDefault(x => x.Id == roomName);
+            if(room.HostID == null)
+            {
+                room.HostID = Context.ConnectionId;
+            }
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+
+
 
             await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has joined the group {roomName}.");
         }
@@ -109,7 +102,25 @@ namespace TriviaRoyale.Server.Hubs
         }
 
 
+        string GetRoomName()
+        {
+            var roomName = string.Empty;
+            var room = Service.rooms.FirstOrDefault(x => x.HostID == Context.ConnectionId);
+            if(room == null)
+            {
+                try
+                {
+                    room = Service.rooms.First(x => x.Players.Exists(y => y.ID == Context.ConnectionId));
 
+                }
+                catch(Exception)
+                {
+
+                    throw;
+                }
+            }
+            return room.Id;
+        }
 
     }
 }

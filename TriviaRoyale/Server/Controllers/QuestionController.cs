@@ -39,8 +39,16 @@ namespace TriviaRoyale.Server.Controllers
             return service.GetQuestions();
         }
 
-        //[HttpGet("Next")]
-        //public Question GetQuestion() => service.GetQuestion();
+
+
+
+
+        //SERVER SIDE
+        //private void InsertList(List<QandA> list) 
+        //{
+        //    Hitta connection strängen!
+
+        //}
 
     }
 }

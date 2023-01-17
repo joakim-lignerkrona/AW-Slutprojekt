@@ -15,5 +15,12 @@ namespace TriviaRoyale.Client.Models
                 Console.WriteLine("Game Started");
             });
         }
+
+        public void ClearPlayerIsAnswering()
+        {
+            PlayerAnswering = null;
+            NotifyStateChanged();
+        }
+
     }
 }

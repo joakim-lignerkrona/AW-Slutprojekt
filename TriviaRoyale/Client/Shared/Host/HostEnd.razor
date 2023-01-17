@@ -1,0 +1,54 @@
+﻿@using System.Web;
+@using TriviaRoyale.Client.Shared.Components
+@using TriviaRoyale.Shared;
+@inject PlayerService service;
+
+
+<h2>Result:</h2>
+
+@foreach (var player in players)
+{
+	
+	<table class="table table-condensed">
+		<tr>
+			<th>Position</th>
+			<th>Name</th>
+			<th>Points</th>
+		</tr>
+		<tr>
+			<td>@(i++)</td>
+			<td>@player.Name</td>
+			<td>@player.Points</td>
+		</tr>
+		
+	</table>
+}
+
+
+@code {
+
+	int i = 1;
+
+	List<Player> players;
+
+	public bool winner { get; set; } = false;
+
+	protected override Task OnInitializedAsync()
+	{
+		players = service.Players.OrderByDescending(p => p.Points).ToList();
+
+
+		StateHasChanged();
+
+		return base.OnInitializedAsync();
+		base.OnInitialized();
+	}
+
+
+	//protected override void OnInitialized()
+	//{
+	//}
+
+
+
+}
