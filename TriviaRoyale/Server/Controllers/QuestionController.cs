@@ -9,15 +9,6 @@ namespace TriviaRoyale.Server.Controllers
     public class QuestionController : ControllerBase
     {
 
-        //TODO 
-        /* 
-        
-        Serverlogiken och connectionsträng. Osäker på detta.
-         
-         
-         */
-
-
         private readonly DataService service;
         //Klienten
         private readonly IWebHostEnvironment webHostEnvironment;
@@ -38,17 +29,5 @@ namespace TriviaRoyale.Server.Controllers
         {
             return service.GetQuestions();
         }
-
-
-
-
-
-        //SERVER SIDE
-        //private void InsertList(List<QandA> list) 
-        //{
-        //    Hitta connection strängen!
-
-        //}
-
     }
 }
