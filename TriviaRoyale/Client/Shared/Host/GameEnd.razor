@@ -1,21 +1,73 @@
-﻿@using TriviaRoyale.Shared;
-@inject HostService service
+﻿@using System.Web;
+@using TriviaRoyale.Client.Shared.Components
+@using TriviaRoyale.Shared;
+@inject PlayerService service;
 
-<h3>GameEnd</h3>
 
-@foreach(var player in service.Players)
+@*<h3>GameEnd</h3>
+<p>Antal spelare: @service.Players.Count</p>
+<p>Mitt namn: @service.Player.Name</p>*@
+
+@*@foreach (var player in service.Players)
 {
-    <div>
-        <h4>@player.Name</h4>
-        <p>Score: @player.Points</p>
-    </div>
-}
+	<div>
+		<h4>@player.Name</h4>
+		<p>Score: @player.Points</p>
+	</div>
+}*@
+@*string firstPlayerName = players[0].Name;*@
+@if (winner)
+{
 
+	<h1>YOU WIN!</h1>
+	<p>Points: @service.Player.Points</p>
+
+
+}
+else
+{
+	<h1>YOU LOSE </h1>
+	<h1>Winner: @players[0].Name  </h1>
+	<h1>Winner score: @players[0].Points  </h1>
+	<p>Points: @service.Player.Points</p>
+
+}
+<h2>Result:</h2>
+@foreach (var player in service.Players)
+{
+	<div>
+		<p>@player.Name</p>
+		<p>Score: @player.Points</p>
+	</div>
+}
 @code {
-    List<Player> players;
-    protected override Task OnInitializedAsync()
-    {
-        players = service.Players.OrderByDescending(p => p.Points).ToList();
-        return base.OnInitializedAsync();
-    }
+	List<Player> players;
+
+	public bool winner { get; set; } = false;
+
+	protected override Task OnInitializedAsync()
+	{
+		players = service.Players.OrderByDescending(p => p.Points).ToList();
+
+
+
+		if (service.Player.Name == players.First().Name)
+		{
+			winner = true;
+		}
+		else
+			winner = false;
+
+		StateHasChanged();
+
+		return base.OnInitializedAsync();
+		base.OnInitialized();
+	}
+
+
+	//protected override void OnInitialized()
+	//{
+	//}
+
+
 }
