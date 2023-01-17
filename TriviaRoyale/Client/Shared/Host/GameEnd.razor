@@ -1,21 +1,89 @@
-﻿@using TriviaRoyale.Shared;
-@inject HostService service
+﻿@using System.Web;
+@using TriviaRoyale.Client.Shared.Components
+@using TriviaRoyale.Shared;
+@inject PlayerService service;
 
-<h3>GameEnd</h3>
 
-@foreach(var player in service.Players)
+@*<h3>GameEnd</h3>
+<p>Antal spelare: @service.Players.Count</p>
+<p>Mitt namn: @service.Player.Name</p>*@
+
+@*@foreach (var player in service.Players)
 {
-    <div>
-        <h4>@player.Name</h4>
-        <p>Score: @player.Points</p>
-    </div>
+	<div>
+		<h4>@player.Name</h4>
+		<p>Score: @player.Points</p>
+	</div>
+}*@
+@*string firstPlayerName = players[0].Name;*@
+@if (winner)
+{
+
+	<h1 class="btn btn-success">YOU WIN!</h1>
+	<p class="btn btn-info">Points: @service.Player.Points</p>
+
+
+}
+else
+{
+	<h1 class="btn btn-danger">YOU LOSE </h1>
+	<p class="btn btn-info">Winner: @players[0].Name  </p>
+	<p class="btn btn-info">Winner score: @players[0].Points  </p>
+	<p class="btn btn-info">Points: @service.Player.Points</p>
+
 }
 
+<h2>Result:</h2>
+
+@foreach (var player in service.Players)
+{
+	
+	
+	
+	<table class="table table-condensed">
+		<tr>
+			<th>Position</th>
+			<th>Name</th>
+			<th>Points</th>
+		</tr>
+		<tr>
+			<td>@(i++)</td>
+			<td>@player.Name</td>
+			<td>@player.Points</td>
+		</tr>
+		
+	</table>
+}
 @code {
-    List<Player> players;
-    protected override Task OnInitializedAsync()
-    {
-        players = service.Players.OrderByDescending(p => p.Points).ToList();
-        return base.OnInitializedAsync();
-    }
+	int i = 1;
+
+	List<Player> players;
+
+	public bool winner { get; set; } = false;
+
+	protected override Task OnInitializedAsync()
+	{
+		players = service.Players.OrderByDescending(p => p.Points).ToList();
+
+
+
+		if (service.Player.Name == players.First().Name)
+		{
+			winner = true;
+		}
+		else
+			winner = false;
+
+		StateHasChanged();
+
+		return base.OnInitializedAsync();
+		base.OnInitialized();
+	}
+
+
+	//protected override void OnInitialized()
+	//{
+	//}
+
+
 }
