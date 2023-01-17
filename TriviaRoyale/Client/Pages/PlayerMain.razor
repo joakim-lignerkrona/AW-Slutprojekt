@@ -7,9 +7,9 @@
 
     @if(service.Player == null)
     {
-        <PlayerJoin RoomID="@roomID" />
+        <PlayerJoin RoomID="@RoomID" />
     }
-    else 
+    else
     {
         switch(service.GameState)
         {
@@ -33,23 +33,26 @@
                 <PlayerJoin RoomID="roomID" />
                 break;
         }
-       
+
     }
-    
+
 </div>
 
 
 @code {
     [Parameter]
-    public string roomID { get; set; } = "";
+    public string RoomID { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
+
+
     {
         service.OnChange += StateHasChanged;
 
         if(!IsConnected)
         {
             await service.ConnectAsync();
+            await service.hubConnection.InvokeAsync("JoinRoom", RoomID);
 
         }
     }

@@ -31,8 +31,14 @@ namespace TriviaRoyale.Server.Controllers
         public IActionResult Index()
         {
             GameRoom host = roomService.NewRoom();
-            
+
             return Redirect($"/Host/{host.Id}");
+        }
+        [HttpGet("rooms")]
+        public GameRoom[] GetRooms()
+        {
+
+            return roomService.rooms.ToArray();
         }
     }
 }

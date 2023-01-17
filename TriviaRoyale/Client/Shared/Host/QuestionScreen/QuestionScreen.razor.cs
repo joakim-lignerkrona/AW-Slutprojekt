@@ -1,4 +1,9 @@
-﻿namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
+using System.Text.Json;
+using TriviaRoyale.Shared.Questions;
+
+namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 {
     public partial class QuestionScreen
     {
@@ -60,19 +65,23 @@
             var index = Random.Shared.Next(0, questions.Count);
             question = questions[index];
             questions.RemoveAt(index);
+            service.ClearPlayerIsAnswering();
         }
 
         async Task EndGame()
         {
+            service.ClearPlayerIsAnswering();
             await service.hubConnection.InvokeAsync("EndOfGame");
         }
         async Task HandleWrongAnswer()
         {
             await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
+            service.ClearPlayerIsAnswering();
         }
         async Task HandleCorrectAnswer()
         {
             await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
+            service.ClearPlayerIsAnswering();
         }
 
 

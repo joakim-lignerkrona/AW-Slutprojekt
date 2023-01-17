@@ -1,4 +1,8 @@
-﻿namespace TriviaRoyale.Server.Hubs
+﻿using Microsoft.AspNetCore.SignalR;
+using TriviaRoyale.Server.Models;
+using TriviaRoyale.Shared;
+
+namespace TriviaRoyale.Server.Hubs
 {
     public class QuizHub : Hub
     {
@@ -17,13 +21,12 @@
         {
             player.ID = Context.ConnectionId;
             Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
-            await Groups.AddToGroupAsync(player.ID, player.RoomID);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await Clients.Caller.SendAsync("PlayerCreated", player);
         }
 
 
-        public async Task WrongAnswer()
+        public async Task WrongAnswer(Player player)
         {
             await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
         }
@@ -73,6 +76,11 @@
 
         public async Task JoinRoom(string roomName)
         {
+            var room = Service.rooms.FirstOrDefault(x => x.Id == roomName);
+            if(room.HostID == null)
+            {
+                room.HostID = Context.ConnectionId;
+            }
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
 
 
@@ -97,7 +105,22 @@
 
         string GetRoomName()
         {
-            return Service.rooms.Find(x => x.Players.Exists(y => y.ID == Context.ConnectionId)).Id;
+            var roomName = string.Empty;
+            var room = Service.rooms.FirstOrDefault(x => x.HostID == Context.ConnectionId);
+            if(room == null)
+            {
+                try
+                {
+                    room = Service.rooms.First(x => x.Players.Exists(y => y.ID == Context.ConnectionId));
+
+                }
+                catch(Exception)
+                {
+
+                    throw;
+                }
+            }
+            return room.Id;
         }
 
     }

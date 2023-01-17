@@ -16,6 +16,7 @@
     protected override Task OnInitializedAsync()
     {
         players = service.Players.OrderByDescending(p => p.Points).ToList();
+        StateHasChanged();
         return base.OnInitializedAsync();
     }
 }
