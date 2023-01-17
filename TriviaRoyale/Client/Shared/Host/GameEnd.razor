@@ -19,28 +19,44 @@
 @if (winner)
 {
 
-	<h1>YOU WIN!</h1>
-	<p>Points: @service.Player.Points</p>
+	<h1 class="btn btn-success">YOU WIN!</h1>
+	<p class="btn btn-info">Points: @service.Player.Points</p>
 
 
 }
 else
 {
-	<h1>YOU LOSE </h1>
-	<h1>Winner: @players[0].Name  </h1>
-	<h1>Winner score: @players[0].Points  </h1>
-	<p>Points: @service.Player.Points</p>
+	<h1 class="btn btn-danger">YOU LOSE </h1>
+	<p class="btn btn-info">Winner: @players[0].Name  </p>
+	<p class="btn btn-info">Winner score: @players[0].Points  </p>
+	<p class="btn btn-info">Points: @service.Player.Points</p>
 
 }
+
 <h2>Result:</h2>
+
 @foreach (var player in service.Players)
 {
-	<div>
-		<p>@player.Name</p>
-		<p>Score: @player.Points</p>
-	</div>
+	
+	
+	
+	<table class="table table-condensed">
+		<tr>
+			<th>Position</th>
+			<th>Name</th>
+			<th>Points</th>
+		</tr>
+		<tr>
+			<td>@(i++)</td>
+			<td>@player.Name</td>
+			<td>@player.Points</td>
+		</tr>
+		
+	</table>
 }
 @code {
+	int i = 1;
+
 	List<Player> players;
 
 	public bool winner { get; set; } = false;
