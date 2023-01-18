@@ -36,7 +36,18 @@ namespace TriviaRoyale.Server.Hubs
         public async Task CreatePlayer(Player player)
         {
             player.SocketID = Context.ConnectionId;
-            Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
+            var room = Service.rooms.Find(x => x.Id == player.RoomID);
+
+            if(room.GameState == GameState.Lobby)
+            {
+                player.isActive = true;
+            }
+            else
+            {
+                player.isActive = false;
+            }
+
+            room.AddPlayer(player);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await Clients.Caller.SendAsync("PlayerCreated", player);
         }
@@ -46,6 +57,11 @@ namespace TriviaRoyale.Server.Hubs
             var player = Service.rooms.Find(x => x.Id == roomID).Players.Find(x => x.ID == cookie);
             if(player != null)
             {
+
+
+                player.isActive = true;
+                player.InactiveSince = null;
+
                 player.SocketID = Context.ConnectionId;
                 await Clients.Caller.SendAsync("PlayerCreated", player);
                 await GetStateAsync(roomID);
@@ -115,6 +131,18 @@ namespace TriviaRoyale.Server.Hubs
             Console.WriteLine("User connected");
 
             return base.OnConnectedAsync();
+        }
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            Service.rooms.Find(x => x.Id == GetRoomName()).Players.ForEach(x =>
+            {
+                if(x.SocketID == Context.ConnectionId)
+                {
+                    x.isActive = false;
+                    x.InactiveSince = DateTime.Now;
+                }
+            });
+            return base.OnDisconnectedAsync(exception);
         }
 
         public async Task JoinRoom(string roomName)
