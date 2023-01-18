@@ -74,6 +74,11 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             service.ClearPlayerIsAnswering();
             await service.hubConnection.InvokeAsync("EndGameOrEliminationRound");
         }
+        async Task EndGame()
+        {
+            service.ClearPlayerIsAnswering();
+            await service.hubConnection.InvokeAsync("EndOfGame");
+        }
         async Task HandleWrongAnswer()
         {
             await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
