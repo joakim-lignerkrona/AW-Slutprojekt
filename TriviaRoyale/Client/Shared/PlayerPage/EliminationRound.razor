@@ -1,0 +1,56 @@
+﻿@using System.Web;
+@using System.Text.Json;
+@using TriviaRoyale.Client.Shared.Components
+@using TriviaRoyale.Shared;
+@using TriviaRoyale.Shared.Questions;
+@using TriviaRoyale.Client.Shared.PlayerPage;
+
+@inject PlayerService PlayerService;
+@inject NavigationManager navigation
+@inject HostService HostService
+
+
+<h3>HostElimination</h3>
+
+<p> HELLO?</p>
+
+@code {
+
+    //async protected override Task OnInitializedAsync()
+    //{
+    //    service.OnChange += StateHasChanged;
+    //    //players = service.Players.OrderByDescending(p => p.Points).ToList();
+
+    //    await GetHardQuestions();
+    //    StateHasChanged();
+
+    //    await base.OnInitializedAsync();
+    //    base.OnInitialized();
+    //}
+
+    //async Task GetHardQuestions()
+    //{
+    //    string url = navigation.BaseUri + "api/Questions/";
+    //    HttpClient httpClient = new();
+
+    //    var q = await httpClient.GetAsync(url);
+    //    if (q.IsSuccessStatusCode)
+    //    {
+    //        // Read the response content
+    //        var content = await q.Content.ReadAsStringAsync();
+    //        // Deserialize the content into an object
+    //        var json = JsonSerializer.Deserialize<Question[]>(content);
+    //        hardQuestions = json.ToList();
+    //        StateHasChanged();
+    //    }
+    //}
+    //void GetHardQuestion()
+    //{
+    //    var index = Random.Shared.Next(0, hardQuestions.Count);
+    //    hardQuestion = hardQuestions[index];
+    //    hardQuestions.RemoveAt(index);
+    //    service.ClearPlayerIsAnswering();
+    //    StateHasChanged();
+    //}
+
+}
