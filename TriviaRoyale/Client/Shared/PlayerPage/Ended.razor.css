@@ -10,8 +10,12 @@ p {
     text-indent: 30px;
     text-transform: uppercase !important;
 }
-#winnerEmoji{
-   font-size:100px;
+#winnerEmoji {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
 }
 /*.my-table {
     background-color:bisque
