@@ -40,7 +40,7 @@
         
         player.ID = Guid.NewGuid().ToString();
         
-       await cookie.SetValue("PlayerID", player.ID);
+        await cookie.SetValue("PlayerID", player.ID);
 
         await service.hubConnection.SendAsync("CreatePlayer", player);
         service.Player = player;
