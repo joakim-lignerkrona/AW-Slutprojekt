@@ -1,4 +1,5 @@
-﻿@page "/Host/{RoomId}"
+﻿@using TriviaRoyale.Client.Shared.Host
+@page "/Host/{RoomId}"
 @using TriviaRoyale.Client.Shared.Host
 @using TriviaRoyale.Client.Shared.Host.QuestionScreen
 @using TriviaRoyale.Shared;
@@ -14,20 +15,24 @@
 <div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark text-light">
 
 
-@switch(service.GameState)
-{
+	@switch (service.GameState)
+	{
 
-    case GameState.Playing:
-    case GameState.PlayerToAnswer:
-        <QuestionScreen />
-        break;
-    case GameState.Ended:
-        <HostEnd />
-        break;
-    default:
-        <PlayerJoinScreen />
-        break;
-}
+		case GameState.Playing:
+		case GameState.PlayerToAnswer:
+		case GameState.EliminationRound:
+			<QuestionScreen />
+			break;
+		case GameState.Ended:
+			<HostEnd />
+			break;
+		case GameState.EndOrElimination:
+			<EndOrElimination />
+			break;
+		default:
+			<PlayerJoinScreen />
+			break;
+	}
 
 </div>
 

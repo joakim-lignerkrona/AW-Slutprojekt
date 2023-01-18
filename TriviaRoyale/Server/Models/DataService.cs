@@ -3,14 +3,11 @@ using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Server.Models
 {
+
     public class DataService
     {
-        //public List<QandA> ListOfQAndA { get; set; }
-
-        //ListOfQAndA i framtiden..
-        //ListOfQAndA = questionController.GetList();
-
         List<Question> questions;
+        List<Question> hardQuestions;
 
         public DataService()
         {
@@ -18,19 +15,22 @@ namespace TriviaRoyale.Server.Models
             string jsonString = File.ReadAllText(path);
             Questions listOfQuestions = JsonSerializer.Deserialize<Questions>(jsonString)!;
             this.questions = new List<Question>(listOfQuestions.questions);
+
+            string hardPath = Path.Combine(Environment.CurrentDirectory, @"JsonData\HardQuestions.json");
+            string HardJsonString = File.ReadAllText(hardPath);
+            Questions tempQuestions = JsonSerializer.Deserialize<Questions>(HardJsonString)!;
+            this.hardQuestions = new List<Question>(tempQuestions.questions);
         }
 
         public Question[] GetQuestions()
         {
 
             return questions.ToArray();
-        }
-        public Question GetQuestion()
+        }        
+        public Question[] GetHardQuestions()
         {
-            Random random = new Random();
-            int r = random.Next(1, questions.Count);
-            return GetRandomQuestion(r);
+
+            return hardQuestions.ToArray();
         }
-        private Question GetRandomQuestion(int r) => questions[r];
     }
 }

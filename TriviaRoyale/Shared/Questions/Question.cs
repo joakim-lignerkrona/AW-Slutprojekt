@@ -6,7 +6,10 @@
     {
         public Question[] questions { get; set; }
     }
-
+    public class HardQuestions
+    {
+        public Question[] hardQuestions { get; set; }
+    }
     public class Question
     {
         public string questionText { get; set; }

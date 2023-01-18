@@ -1,54 +1,122 @@
 ﻿@using System.Web;
+@using System.Text.Json;
 @using TriviaRoyale.Client.Shared.Components
 @using TriviaRoyale.Shared;
+@using TriviaRoyale.Shared.Questions;
+@using TriviaRoyale.Client.Shared.PlayerPage
+
+
 @inject PlayerService service;
+@inject NavigationManager navigation
+@inject HostService service
 
 
 <h2>Result:</h2>
 
+
 @foreach (var player in players)
 {
-	
-	<table class="table table-condensed">
-		<tr>
-			<th>Position</th>
-			<th>Name</th>
-			<th>Points</th>
-		</tr>
-		<tr>
-			<td>@(i++)</td>
-			<td>@player.Name</td>
-			<td>@player.Points</td>
-		</tr>
-		
-	</table>
+    <table class="table table-condensed">
+        <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Points</th>
+        </tr>
+        <tr>
+            <td>@(i++)</td>
+            <td>@player.Name</td>
+            <td>@player.Points</td>
+        </tr>
+        
+    </table>
 }
 
+   @* <button class="btn btn-warning p-5" @onclick="ToElimination">
+        <span class="h3">
+            Elimination round!
+        </span>
+    </button>
 
-@code {
+<button class="btn btn-warning p-5" @onclick="GameEnded">
+        <span class="h3">
+           END GAME!
+        </span>
+    </button>*@
+    <div class="row">
+        <div class="d-flex justify-content-around">
+            @if (service.GameState == GameState.PlayerToAnswer)
+            {
+                <button class="btn btn-danger p-5" @onclick="HandleWrongAnswer">
+                    <span class="h3">
+                        Wrong
+                    </span>
+                </button>
+                <button class="btn btn-success p-5" @onclick="HandleCorrectAnswer">
+                    <span class="h3">
+                        Correct!
+                    </span>
+                </button>
+            }
+            
+        </div>
+    </div>
 
-	int i = 1;
+    @code {
+    public List<Question> hardQuestions { get; set; }
+    public Question hardQuestion { get; set; }
+    int i = 1;
 
-	List<Player> players;
+    List<Player> players;
 
-	public bool winner { get; set; } = false;
+    public bool winner { get; set; } = false;
 
-	protected override Task OnInitializedAsync()
-	{
-		players = service.Players.OrderByDescending(p => p.Points).ToList();
+   
 
+    async protected override Task OnInitializedAsync()
+    {
+        service.OnChange += StateHasChanged;
+        players = service.Players.OrderByDescending(p => p.Points).ToList();
 
-		StateHasChanged();
+        await GetHardQuestions();
+        StateHasChanged();
 
-		return base.OnInitializedAsync();
-		base.OnInitialized();
-	}
+        await base.OnInitializedAsync();
+        base.OnInitialized();
+    }
 
+    async Task GetHardQuestions()
+    {
+        string url = navigation.BaseUri + "api/Questions/";
+        HttpClient httpClient = new();
 
-	//protected override void OnInitialized()
-	//{
-	//}
-
-
-
-}
+        var q = await httpClient.GetAsync(url);
+        if (q.IsSuccessStatusCode)
+        {
+            // Read the response content
+            var content = await q.Content.ReadAsStringAsync();
+            // Deserialize the content into an object
+            var json = JsonSerializer.Deserialize<Question[]>(content);
+            hardQuestions = json.ToList();
+            StateHasChanged();
+        }
+    }
+    void GetHardQuestion()
+    {
+        var index = Random.Shared.Next(0, hardQuestions.Count);
+        hardQuestion = hardQuestions[index];
+        hardQuestions.RemoveAt(index);
+        service.ClearPlayerIsAnswering();
+        StateHasChanged();
+    }
+    async Task HandleWrongAnswer()
+    {
+        await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
+        service.ClearPlayerIsAnswering();
+    }
+    async Task HandleCorrectAnswer()
+    {
+        service.PlayerAnswering.Points = +5;
+        await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
+        service.ClearPlayerIsAnswering();
+    }
+    }

@@ -6,17 +6,8 @@ namespace TriviaRoyale.Server.Controllers
 {
     [Route("api/")]
     [ApiController]
-    public class QuestionControllerAPI : ControllerBase
+    public class QuestionController : ControllerBase
     {
-
-        //TODO 
-        /* 
-        
-        Serverlogiken och connectionsträng. Osäker på detta.
-         
-         
-         */
-
 
         private readonly DataService service;
         //Klienten
@@ -25,7 +16,7 @@ namespace TriviaRoyale.Server.Controllers
         private readonly IConfiguration configuration;
 
         //DI
-        public QuestionControllerAPI(DataService service, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public QuestionController(DataService service, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             this.service = service;
             this.webHostEnvironment = webHostEnvironment;
@@ -36,20 +27,13 @@ namespace TriviaRoyale.Server.Controllers
         [HttpGet("questions")]
         public Question[] GetList()
         {
-
             return service.GetQuestions();
         }
 
-
-
-
-
-        //SERVER SIDE
-        //private void InsertList(List<QandA> list) 
-        //{
-        //    Hitta connection strängen!
-
-        //}
-
+        [HttpGet("hardquestions")]
+        public Question[] GetHardList()
+        {
+            return service.GetHardQuestions();
+        }
     }
 }
