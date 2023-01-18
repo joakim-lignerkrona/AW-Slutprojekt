@@ -2,31 +2,38 @@
 @using TriviaRoyale.Client.Shared.Components
 @using TriviaRoyale.Shared;
 @inject PlayerService service;
+@*<style>
+	/*h1
+	{
+		color:red
+	}*/
 
+	/*h2
+	{
+		background-color:aquamarine
+		ActiveBorder:10px
+		border-radius:12px
+	}
 
-@*<h3>GameEnd</h3>
-<p>Antal spelare: @service.Players.Count</p>
-<p>Mitt namn: @service.Player.Name</p>*@
-
-@*@foreach (var player in service.Players)
+	.ram
+	{
+		border: 2px solid black;
+		padding: 10px;
+	}*/
+</style>*@
+@*<p class="ram"></p>*@
+@if (winner)
 {
-	<div>
-		<h4>@player.Name</h4>
-		<p>Score: @player.Points</p>
-	</div>
-}*@
-@*string firstPlayerName = players[0].Name;*@
-@if(winner)
-{
 
-	<h1 class="btn btn-success">YOU WIN!</h1>
+	
+	<p class="btn btn-success">YOU WIN!</p>
 	<p class="btn btn-info">Points: @service.Player.Points</p>
 
 
 }
 else
 {
-	<h1 class="btn btn-danger">YOU LOSE </h1>
+	<p class="btn btn-danger">YOU LOSE </p>
 	<p class="btn btn-info">Winner: @players[0].Name  </p>
 	<p class="btn btn-info">Winner score: @players[0].Points  </p>
 	<p class="btn btn-info">Points: @service.Player.Points</p>
@@ -35,25 +42,23 @@ else
 
 <h2>Result:</h2>
 
-@foreach (var player in service.Players.OrderByDescending(p => p.Points))
-{
 
-
-
-	<table class="table table-condensed">
-		<tr>
-			<th>Position</th>
-			<th>Name</th>
-			<th>Points</th>
-		</tr>
+<table class="table table-condensed my-table">
+	<tr>
+		<th>Position</th>
+		<th>Name</th>
+		<th>Points</th>
+	</tr>
+	@foreach (var player in service.Players.OrderByDescending(p => p.Points))
+	{
 		<tr>
 			<td>@(i++)</td>
-			<td>@player.Name</td>
+			<td>@player.Emoji @player.Name</td>
 			<td>@player.Points</td>
 		</tr>
+	}
 
-	</table>
-}
+</table>
 @code {
 
 	int i = 1;
@@ -67,8 +72,7 @@ else
 		players = service.Players.OrderByDescending(p => p.Points).ToList();
 
 
-
-		if(service.Player.Name == players.First().Name)
+		if (service.Player.Name == players.First().Name)
 		{
 			winner = true;
 		}
@@ -80,12 +84,5 @@ else
 		return base.OnInitializedAsync();
 		base.OnInitialized();
 	}
-
-
-	//protected override void OnInitialized()
-	//{
-	//}
-
-
 
 }

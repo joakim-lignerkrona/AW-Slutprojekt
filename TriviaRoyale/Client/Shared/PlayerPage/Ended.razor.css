@@ -1,0 +1,25 @@
+﻿
+#hett{
+    color: red;
+    font-style: italic;
+    text-shadow: 2px 2px 2px gray;
+}
+
+p {
+    color: navy;
+    text-indent: 30px;
+    text-transform: uppercase !important;
+}
+
+/*.my-table {
+    background-color:bisque
+}*/
+
+/* set the background color of the even rows */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+/* set the background color of the odd rows */
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
