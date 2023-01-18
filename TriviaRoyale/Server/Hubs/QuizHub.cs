@@ -57,11 +57,8 @@ namespace TriviaRoyale.Server.Hubs
             var player = Service.rooms.Find(x => x.Id == roomID).Players.Find(x => x.ID == cookie);
             if(player != null)
             {
-
-
                 player.isActive = true;
                 player.InactiveSince = null;
-
                 player.SocketID = Context.ConnectionId;
                 await Clients.Caller.SendAsync("PlayerCreated", player);
                 await GetStateAsync(roomID);
