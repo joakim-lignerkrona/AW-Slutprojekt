@@ -46,12 +46,12 @@
 </ul>
 
 @code {
-    private HubConnection? hubConnection;
+    private HubConnection hubConnection;
 
-    private string? message;
+    private string message;
     List<string> messages = new();
-    private string? privateMessage;
-    private string? roomName = "privateRoom";
+    private string privateMessage;
+    private string roomName = "privateRoom";
 
     List<string> playersInRoom = new();
 
