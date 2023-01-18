@@ -41,10 +41,8 @@ namespace TriviaRoyale.Client.Models
                 Players = players.ToList();
                 NotifyStateChanged();
             });
-            hubConnection.On<Player, GameState>("PlayerIsAnswering", (player, state) =>
+            hubConnection.On<Player>("PlayerIsAnswering", (player) =>
             {
-
-                GameState = state;
                 PlayerAnswering = player;
                 NotifyStateChanged();
             });
@@ -79,6 +77,7 @@ namespace TriviaRoyale.Client.Models
         }
         public void GetPlayers()
         {
+
             hubConnection.InvokeAsync("GetConnectedPlayers", RoomID);
         }
 

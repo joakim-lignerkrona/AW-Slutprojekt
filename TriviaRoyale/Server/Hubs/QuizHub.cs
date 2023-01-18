@@ -65,36 +65,37 @@ namespace TriviaRoyale.Server.Hubs
             room.GameState = state;
             await Clients.Groups(room.Id).SendAsync("StateChange", room.GameState);
         }
-        private async Task GetStateAsync(string RoomName)
+        public async Task GetStateAsync(string RoomName)
         {
             var room = Service.rooms.Find(x => x.Id == RoomName);
-            await Clients.Groups(room.Id).SendAsync("StateChange", room.GameState);
+            await ChangeStateAsync(RoomName, room.GameState);
         }
 
         public async Task CorrectAnswer(Player player)
         {
             var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
             roomPlayer.Points++;
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
             await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+            await ChangeStateAsync(GetRoomName(), GameState.Playing);
         }
 
         public async Task PlayerClick(Player player)
         {
-            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
+            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
+            await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
         }
 
 
         public async Task GetConnectedPlayers(string roomName)
         {
-            await Clients.User(Context.UserIdentifier).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
+            await Clients.Caller.SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
 
         }
 
 
         public async Task StartGame()
         {
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+            await ChangeStateAsync(GetRoomName(), GameState.Playing);
         }
 
         public Task SendPrivateMessage(string user, string message)
@@ -105,7 +106,8 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task EndOfGame()
         {
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Ended);
+
+            await ChangeStateAsync(GetRoomName(), GameState.Ended);
 
         }
         public override Task OnConnectedAsync()

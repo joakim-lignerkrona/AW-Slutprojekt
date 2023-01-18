@@ -4,13 +4,14 @@
 @using TriviaRoyale.Shared;
 @inject ICookie cookie;
 @inject HostService service;
+@inject NavigationManager navigation;
 
 <PageTitle>Host - Quiz my app</PageTitle>
 
 
 
 
-<div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark">
+<div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark text-light">
 
 
 @switch(service.GameState)

@@ -5,7 +5,7 @@
 @inject NavigationManager navigation
 @inject HostService service
 
-<div class="container">
+<div class="container text-lignt">
     <div class="row mb-5">
         <div class="d-flex justify-content-between">
             @if(question != null)
@@ -28,7 +28,7 @@
             <div id="player-list" class="border-2 col-6">
                 @if(service.PlayerAnswering == null)
                 {
-                    <h2>Wait for a Player to anser</h2>
+                    <h2>Wait for a player to answer</h2>
                 }
                 else
                 {
