@@ -5,6 +5,7 @@
         public string Id { get; set; }
         public string HostID { get; set; }
         public List<Player> Players { get; set; } = new();
+        public GameState GameState { get; set; }
 
         public GameRoom()
         {

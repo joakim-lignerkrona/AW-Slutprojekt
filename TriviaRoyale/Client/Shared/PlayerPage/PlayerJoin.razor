@@ -1,15 +1,17 @@
 ﻿@using System.Globalization;
 @using TriviaRoyale.Shared;
 @using TriviaRoyale.Client;
+
 @inject NavigationManager Navigation
 @inject PlayerService service;
+@inject ICookie cookie 
 
 
 
 
 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
     <h1 class="text-light">Create your player</h1>
-    <form class="col-lg-7 col-12 col-md-10 bg-light rounded-3 p-4">
+    <form class="col-lg-7 col-12 col-md-10 bg-light text-black rounded-3 p-4">
 
         <div>
             <label for="name">Name:</label>
@@ -78,7 +80,6 @@
 "🥖", "🌭", "🍔", "🍟", "🍕", "🌮", "🌯", "🍣",
 "🍤", "🍦", "🎂", "🍫", "🍿", "🍩"};
 
-
     private async Task CreatePlayer()
     {
 
@@ -90,6 +91,10 @@
         ErrorMessageVisibility = false;
         player.Name = FixNamingCasing(player.Name);
         player.RoomID = RoomID;
+        
+        player.ID = Guid.NewGuid().ToString();
+        
+        await cookie.SetValue("PlayerID", player.ID);
 
         await service.hubConnection.SendAsync("CreatePlayer", player);
 

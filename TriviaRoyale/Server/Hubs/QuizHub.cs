@@ -16,26 +16,67 @@ namespace TriviaRoyale.Server.Hubs
         {
             await Clients.Groups(GetRoomName()).SendAsync("ReceiveAnswer", answer);
         }
+        public async Task RegisterHost(string hostID, string roomID)
+        {
+            var room = Service.rooms.FirstOrDefault(r => r.Id == roomID);
+            var cookie = Context.GetHttpContext().Request.Cookies["HostID"];
+            if(room.HostID == null)
+            {
+                room.HostID = hostID;
+                await Clients.Caller.SendAsync("HostAccepted", hostID);
 
+            }
+            else if(room.HostID == cookie)
+            {
+                await Clients.Caller.SendAsync("HostAccepted", hostID);
+
+            }
+            await GetStateAsync(roomID);
+        }
         public async Task CreatePlayer(Player player)
         {
-            player.ID = Context.ConnectionId;
+            player.SocketID = Context.ConnectionId;
             Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await Clients.Caller.SendAsync("PlayerCreated", player);
+        }
+        public async Task RestorePlayer(string roomID)
+        {
+            var cookie = Context.GetHttpContext().Request.Cookies["playerId"];
+            var player = Service.rooms.Find(x => x.Id == roomID).Players.Find(x => x.ID == cookie);
+            if(player != null)
+            {
+                player.SocketID = Context.ConnectionId;
+                await Clients.Caller.SendAsync("PlayerCreated", player);
+                await GetStateAsync(roomID);
+            }
         }
 
 
         public async Task WrongAnswer(Player player)
         {
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+            await ChangeStateAsync(GetRoomName(), GameState.Playing);
+
         }
+
+        private async Task ChangeStateAsync(string RoomName, GameState state)
+        {
+            var room = Service.rooms.Find(x => x.Id == RoomName);
+            room.GameState = state;
+            await Clients.Groups(room.Id).SendAsync("StateChange", room.GameState);
+        }
+        public async Task GetStateAsync(string RoomName)
+        {
+            var room = Service.rooms.Find(x => x.Id == RoomName);
+            await ChangeStateAsync(RoomName, room.GameState);
+        }
+
         public async Task CorrectAnswer(Player player)
         {
             var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
             roomPlayer.Points++;
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
             await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+            await ChangeStateAsync(GetRoomName(), GameState.Playing);
         }
 
 
@@ -74,20 +115,21 @@ namespace TriviaRoyale.Server.Hubs
 
 		public async Task PlayerClick(Player player)
         {
-            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
+            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
+            await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
         }
 
 
         public async Task GetConnectedPlayers(string roomName)
         {
-            await Clients.User(Context.UserIdentifier).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
+            await Clients.Caller.SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
 
         }
 
 
         public async Task StartGame()
         {
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+            await ChangeStateAsync(GetRoomName(), GameState.Playing);
         }
 
         public Task SendPrivateMessage(string user, string message)
@@ -98,7 +140,8 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task EndOfGame()
         {
-            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Ended);
+
+            await ChangeStateAsync(GetRoomName(), GameState.Ended);
 
         } 
         
@@ -125,10 +168,7 @@ namespace TriviaRoyale.Server.Hubs
         public async Task JoinRoom(string roomName)
         {
             var room = Service.rooms.FirstOrDefault(x => x.Id == roomName);
-            if(room.HostID == null)
-            {
-                room.HostID = Context.ConnectionId;
-            }
+
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
 
 
@@ -152,13 +192,14 @@ namespace TriviaRoyale.Server.Hubs
 
         string GetRoomName()
         {
+            var cookie = Context.GetHttpContext().Request.Cookies["HostID"];
             var roomName = string.Empty;
-            var room = Service.rooms.FirstOrDefault(x => x.HostID == Context.ConnectionId);
+            var room = Service.rooms.FirstOrDefault(x => x.HostID == cookie);
             if(room == null)
             {
                 try
                 {
-                    room = Service.rooms.First(x => x.Players.Exists(y => y.ID == Context.ConnectionId));
+                    room = Service.rooms.First(x => x.Players.Exists(y => y.SocketID == Context.ConnectionId));
 
                 }
                 catch(Exception)

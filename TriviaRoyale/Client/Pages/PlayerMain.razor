@@ -4,7 +4,7 @@
 @page "/Player/{roomID}"
 @inject PlayerService service;
 
-<div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark">
+<div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark text-light">
 
     @if(service.Player == null)
     {
@@ -53,15 +53,20 @@
     public string RoomID { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
-
-
     {
         service.OnChange += StateHasChanged;
 
         if(!IsConnected)
         {
+            service.RoomID = RoomID;
             await service.ConnectAsync();
             await service.hubConnection.InvokeAsync("JoinRoom", RoomID);
+
+            if(service.Player == null)
+            {
+                Console.WriteLine("check if player exist");
+                await service.hubConnection.InvokeAsync("RestorePlayer", RoomID);
+            }
 
         }
     }

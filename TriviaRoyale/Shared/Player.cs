@@ -7,6 +7,8 @@ namespace TriviaRoyale.Shared
         public static int createdPlayers;
         public string ID { get; set; }
         public string RoomID { get; set; }
+        public string SocketID { get; set; }
+
         public string Emoji { get; set; }
 
         public int Points { get; set; }
