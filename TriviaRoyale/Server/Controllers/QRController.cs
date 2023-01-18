@@ -14,7 +14,7 @@ namespace TriviaRoyale.Server.Controllers
 		private readonly RoomService roomService;
 
 
-		public QRController(QRService service, IHubContext<QuizHub> hubContext, RoomService roomService, )
+		public QRController(QRService service, IHubContext<QuizHub> hubContext, RoomService roomService)
 		{
 			this.service = service;
 			this.hubContext = hubContext;
