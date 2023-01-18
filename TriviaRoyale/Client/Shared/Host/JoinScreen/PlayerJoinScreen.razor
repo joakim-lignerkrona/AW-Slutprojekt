@@ -54,6 +54,8 @@
             </div>
         </div>
     </div>
+    @if(service.HostID != null)
+    {  
     <div class="row">
         <div class="d-flex justify-content-center">
             @if (service.Players.Count < 2)
@@ -74,13 +76,19 @@
             }
         </div>
     </div>
+    }
 </div>
 
 @code {
-    
+
     void StartGame()
     {
         service.StartGame();
+    }
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine(service.HostID);
+        return base.OnAfterRenderAsync(firstRender);
     }
 
     protected override  void OnInitialized()

@@ -18,7 +18,19 @@ namespace TriviaRoyale.Client.Pages
                 await service.ConnectAsync();
                 await service.hubConnection.InvokeAsync("JoinRoom", RoomId);
                 service.RoomID = RoomId;
+                var hostCookie = await cookie.GetValue("HostID");
+                var roomCookie = await cookie.GetValue("RoomID");
 
+                if(hostCookie == null || RoomId != roomCookie)
+                {
+                    var hostID = Guid.NewGuid().ToString();
+                    await cookie.SetValue("HostID", hostID);
+                    await cookie.SetValue("RoomID", RoomId);
+                    await service.hubConnection.InvokeAsync("RegisterHost", hostID, RoomId);
+
+                }
+                else
+                    await service.hubConnection.InvokeAsync("RegisterHost", null, RoomId);
             }
             service.GetPlayers();
         }
