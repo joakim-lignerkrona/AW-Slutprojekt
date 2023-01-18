@@ -19,6 +19,9 @@
         {
             Players.Remove(player);
         }
-
+        public void NewGame()
+        {
+            Players.ForEach(p => p.Points = 0);
+        }
     }
 }

@@ -8,6 +8,8 @@ namespace TriviaRoyale.Shared
         public string ID { get; set; }
         public string RoomID { get; set; }
         public string SocketID { get; set; }
+        public bool isActive { get; set; } = false;
+        public DateTime? InactiveSince { get; set; }
 
         public string Emoji { get; set; }
 
