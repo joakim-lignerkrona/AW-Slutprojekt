@@ -19,17 +19,17 @@
 @if(winner)
 {
 
-	<h1 class="btn btn-success">YOU WIN!</h1>
-	<p class="btn btn-info">Points: @service.Player.Points</p>
+	<h1 class="text-light bg-success">YOU WIN!</h1>
+	<p class="text-black bg-info">Points: @service.Player.Points</p>
 
 
 }
 else
 {
-	<h1 class="btn btn-danger">YOU LOSE </h1>
-	<p class="btn btn-info">Winner: @players[0].Name  </p>
-	<p class="btn btn-info">Winner score: @players[0].Points  </p>
-	<p class="btn btn-info">Points: @service.Player.Points</p>
+	<h1 class="text-light bg-danger">YOU LOSE </h1>
+	<p class="text-black bg-info">Points">Winner: @players[0].Name  </p>
+	<p class="text-black bg-info">Points">Winner score: @players[0].Points  </p>
+	<p class="text-black bg-info">Points">Points: @service.Player.Points</p>
 
 }
 
