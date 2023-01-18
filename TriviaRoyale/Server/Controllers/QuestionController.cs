@@ -26,7 +26,7 @@ namespace TriviaRoyale.Server.Controllers
 		[HttpGet("questions")]
 		public IActionResult GetList()
 		{
-			return Ok(service.GetQuestions());
+			return Ok("service.GetQuestions()");
 		}
 
 		[HttpGet("hardquestions")]
