@@ -20,8 +20,7 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         {
             service.OnChange += StateHasChanged;
             await GetQuestions();
-            GetQuestion();
-            //await GetHardQuestions();
+            await GetHardQuestions();
         }
 
         async Task GetQuestions()
@@ -43,38 +42,34 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         void GetQuestion()
         {
-            var index = Random.Shared.Next(0, questions.Count);
-            question = questions[index];
-            questions.RemoveAt(index);
+            int index;
+            var localQuestions = service.GameState == GameState.EliminationRound ? hardQuestions : questions;
+            index = Random.Shared.Next(0, localQuestions.Count);
+            question = localQuestions[index];
+            localQuestions.RemoveAt(index);
+
             service.ClearPlayerIsAnswering();
             StateHasChanged();
         }
-  //      async Task GetHardQuestions()
-  //      {
-  //          string url = navigation.BaseUri + "api/Questions/";
-  //          HttpClient httpClient = new();
+        async Task GetHardQuestions()
+        {
+            string url = navigation.BaseUri + "api/hardquestions/";
+            HttpClient httpClient = new();
 
-  //          var q = await httpClient.GetAsync(url);
-  //          if (q.IsSuccessStatusCode)
-  //          {
-  //              // Read the response content
-  //              var content = await q.Content.ReadAsStringAsync();
-  //              // Deserialize the content into an object
-  //              var json = JsonSerializer.Deserialize<Question[]>(content);
-  //              hardQuestions = json.ToList();
-  //              StateHasChanged();
-  //          }
-  //      }
-		//void GetHardQuestion()
-		//{
-		//	var index = Random.Shared.Next(0, questions.Count);
-		//	question = hardQuestions[index];
-		//	hardQuestions.RemoveAt(index);
-		//	service.ClearPlayerIsAnswering();
-		//	StateHasChanged();
-		//}
+            var q = await httpClient.GetAsync(url);
+            if(q.IsSuccessStatusCode)
+            {
+                // Read the response content
+                var content = await q.Content.ReadAsStringAsync();
+                // Deserialize the content into an object
+                var json = JsonSerializer.Deserialize<Question[]>(content);
+                hardQuestions = json.ToList();
+                StateHasChanged();
+            }
+        }
 
-		async Task EndOrEliminate()
+
+        async Task EndOrEliminate()
         {
             service.ClearPlayerIsAnswering();
             await service.hubConnection.InvokeAsync("EndGameOrEliminationRound");

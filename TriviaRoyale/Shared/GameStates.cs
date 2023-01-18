@@ -6,8 +6,8 @@
         Playing,
         PlayerToAnswer,
         OpponentToAnswer,
-        HostElimination,
-		EndOrElimination,
-		Ended
+        EliminationRound,
+        EndOrElimination,
+        Ended
     }
 }

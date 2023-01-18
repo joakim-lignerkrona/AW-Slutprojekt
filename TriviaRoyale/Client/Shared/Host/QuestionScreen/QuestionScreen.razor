@@ -41,37 +41,46 @@
             </div>
         </div>
     </div>
-    @if(service.HostID != null){
-    <div class="row">
-        <div class="d-flex justify-content-around">
-            @if(service.GameState == GameState.PlayerToAnswer)
-            {
-                <button class="btn btn-danger p-5" @onclick="HandleWrongAnswer">
-                    <span class="h3">
-                        Wrong
-                    </span>
-                </button>
-                <button class="btn btn-success p-5" @onclick="HandleCorrectAnswer">
-                    <span class="h3">
-                        Correct!
-                    </span>
-                </button>
-            }
-            else
-            {
-            <button class="btn btn-warning p-5" @onclick="GetQuestion">
-                <span class="h3">
-                    New question
-                </span>
-            </button>
-            <button class="btn btn-danger p-5" @onclick="EndOrEliminate">
-                <span class="h3">
-                    End Game or Elimination round
-                </span>
-            </button>
-            }
+    @if(service.HostID != null)
+    {
+        <div class="row">
+            <div class="d-flex justify-content-around">
+                @if(service.GameState == GameState.PlayerToAnswer)
+                {
+                    <button class="btn btn-danger p-5" @onclick="HandleWrongAnswer">
+                        <span class="h3">
+                            Wrong
+                        </span>
+                    </button>
+                    <button class="btn btn-success p-5" @onclick="HandleCorrectAnswer">
+                        <span class="h3">
+                            Correct!
+                        </span>
+                    </button>
+                }
+                else
+                {
+                    if(
+                    (service.GameState != GameState.EliminationRound && questions?.Count > 0)
+                    ||
+                    (service.GameState == GameState.EliminationRound && hardQuestions?.Count > 0)
+                    )
+                    {
+
+                        <button class="btn btn-warning p-5" @onclick="GetQuestion">
+                            <span class="h3">
+                                New question
+                            </span>
+                        </button>
+                    }
+                    <button class="btn btn-danger p-5" @onclick="EndOrEliminate">
+                        <span class="h3">
+                            End Game or Elimination round
+                        </span>
+                    </button>
+                }
+            </div>
         </div>
-    </div>
     }
 </div>
 @code {

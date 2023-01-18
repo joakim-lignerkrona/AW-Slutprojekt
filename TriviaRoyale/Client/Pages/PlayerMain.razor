@@ -21,6 +21,7 @@
                 break;
             
             case GameState.Playing:
+            case GameState.EliminationRound:
                 <Playing />
                 break;
             case GameState.PlayerToAnswer:
@@ -35,7 +36,6 @@
             case GameState.EndOrElimination:
                 <EndOrElimination />
                 break;
-
             default:
                 <PlayerJoin RoomID="roomID" />
                 break;
