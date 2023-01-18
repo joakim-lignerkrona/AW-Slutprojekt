@@ -12,9 +12,10 @@ namespace TriviaRoyale.Server.Models
 
         public DataService()
         {
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\disney.json");
-            string jsonString = File.ReadAllText(path);
-            Questions listOfQuestions = JsonSerializer.Deserialize<Questions>(jsonString)!;
+            //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\disney.json");
+            //string jsonString = File.ReadAllText(path);
+            string json = "{\"questions\":[{\"questionText\":\"What is the name of the princess in Sleeping Beauty?\",\"answer\":\"Princess Aurora\"},{\"questionText\":\"In The Lion King, what is the name of Simba's mother?\",\"answer\":\"Sarabi\"},{\"questionText\":\"What is the name of the friendly ghost in Disney's Haunted Mansion ride?\",\"answer\":\"Gus\"},{\"questionText\":\"What is the name of the pirate captain in the Pirates of the Caribbean ride?\",\"answer\":\"Captain Jack Sparrow\"},{\"questionText\":\"In The Little Mermaid, what is the name of Ariel's best friend?\",\"answer\":\"Flounder\"}]}";
+            Questions listOfQuestions = JsonSerializer.Deserialize<Questions>(json)!;
             this.questions = new List<Question>(listOfQuestions.questions);
 
             string hardPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\HardQuestions.json");
