@@ -23,10 +23,10 @@ namespace TriviaRoyale.Server.Models
 				new Question { answer= "Flounder", questionText = "In The Little Mermaid, what is the name of Ariel's best friend?"}
 			};
 
-			string hardPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\HardQuestions.json");
-			string HardJsonString = File.ReadAllText(hardPath);
-			Questions tempQuestions = JsonSerializer.Deserialize<Questions>(HardJsonString)!;
-			this.hardQuestions = new List<Question>(tempQuestions.questions);
+			//string hardPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\HardQuestions.json");
+			//string HardJsonString = File.ReadAllText(hardPath);
+			//Questions tempQuestions = JsonSerializer.Deserialize<Questions>(HardJsonString)!;
+			//this.hardQuestions = new List<Question>(tempQuestions.questions);
 		}
 
 		public Question[] GetQuestions()
