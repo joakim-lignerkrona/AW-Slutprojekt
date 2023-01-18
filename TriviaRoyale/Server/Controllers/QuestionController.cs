@@ -24,9 +24,9 @@ namespace TriviaRoyale.Server.Controllers
 
 		//CLIENT SIDE
 		[HttpGet("questions")]
-		public Question[] GetList()
+		public IActionResult GetList()
 		{
-			return service.GetQuestions();
+			return Ok(service.GetQuestions());
 		}
 
 		[HttpGet("hardquestions")]
