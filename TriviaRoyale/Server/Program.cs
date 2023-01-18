@@ -18,7 +18,7 @@ namespace TriviaRoyale
 
 			builder.Services.AddTransient<QRService>();
 
-			builder.Services.AddTransient<DataService>();
+			builder.Services.AddTransient<QuestionService>();
 			builder.Services.AddSingleton<RoomService>();
 
 

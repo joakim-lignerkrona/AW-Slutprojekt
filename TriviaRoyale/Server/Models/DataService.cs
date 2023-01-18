@@ -5,12 +5,12 @@ using TriviaRoyale.Shared.Questions;
 namespace TriviaRoyale.Server.Models
 {
 
-	public class DataService
+	public class QuestionService
 	{
 		List<Question> questions;
 		List<Question> hardQuestions;
 
-		public DataService()
+		public QuestionService()
 		{
 			//string path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\disney.json");
 			//string jsonString = File.ReadAllText(path);

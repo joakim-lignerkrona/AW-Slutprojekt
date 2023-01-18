@@ -8,14 +8,14 @@ namespace TriviaRoyale.Server.Controllers
 	public class QuestionController : Controller
 	{
 
-		private readonly DataService service;
+		private readonly QuestionService service;
 		////Klienten
 		//private readonly IWebHostEnvironment webHostEnvironment;
 		////Servern
 		//private readonly IConfiguration configuration;
 
 		//DI
-		public QuestionController(DataService service /*IWebHostEnvironment webHostEnvironment, IConfiguration configuration*/)
+		public QuestionController(QuestionService service /*IWebHostEnvironment webHostEnvironment, IConfiguration configuration*/)
 		{
 			this.service = service;
 			//this.webHostEnvironment = webHostEnvironment;
@@ -26,7 +26,7 @@ namespace TriviaRoyale.Server.Controllers
 		[HttpGet("questions")]
 		public IActionResult GetList()
 		{
-			return Ok("service.GetQuestions()");
+			return Ok(service.GetQuestions());
 		}
 
 		[HttpGet("hardquestions")]
