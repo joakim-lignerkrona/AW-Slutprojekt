@@ -42,6 +42,11 @@ namespace TriviaRoyale
                 app.UseWebAssemblyDebugging();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/v1/swagger.json", "v1");
+                    options.RoutePrefix = "/swagger";
+                });
             }
             else
             {
@@ -49,11 +54,7 @@ namespace TriviaRoyale
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/v1/swagger.json", "v1");
-                options.RoutePrefix = "/swagger";
-            });
+
 
             app.UseHttpsRedirection();
 
