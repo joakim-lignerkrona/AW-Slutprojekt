@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
+
 namespace TriviaRoyale.Client.Pages
 {
     public partial class HostPage
@@ -18,7 +19,21 @@ namespace TriviaRoyale.Client.Pages
                 await service.ConnectAsync();
                 await service.hubConnection.InvokeAsync("JoinRoom", RoomId);
                 service.RoomID = RoomId;
+                var hostCookie = await cookie.GetValue("HostID");
+                var roomCookie = await cookie.GetValue("RoomID");
 
+                if(hostCookie == null || RoomId != roomCookie)
+                {
+                    var hostID = Guid.NewGuid().ToString();
+                    await cookie.SetValue("HostID", hostID);
+                    await cookie.SetValue("RoomID", RoomId);
+                    await service.hubConnection.InvokeAsync("RegisterHost", hostID, RoomId);
+                    navigation.NavigateTo(navigation.Uri.ToString(), true);
+                }
+                else
+                {
+                    await service.hubConnection.InvokeAsync("RegisterHost", hostCookie, RoomId);
+                }
             }
             service.GetPlayers();
         }

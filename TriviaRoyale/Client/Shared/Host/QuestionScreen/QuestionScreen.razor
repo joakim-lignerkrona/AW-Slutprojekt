@@ -5,27 +5,30 @@
 @inject NavigationManager navigation
 @inject HostService service
 
-<div class="container">
+<div class="container text-lignt">
     <div class="row mb-5">
         <div class="d-flex justify-content-between">
-            @if(question !=null)
+            @if(question != null)
             {
-            <div class="col-6">
-                <h3>Question</h3>
-                <p>
-                    @question?.questionText
-                </p>
-                <p>
-                    @question?.answer
+                <div class="col-6">
+                    <h1>Question</h1>
+                    <h3>
+                        @question?.questionText
+                    </h3>
+                    @if(service.HostID != null)
+                    {
 
-                </p>
+                        <p class="h5">
+                            @question?.answer
+                        </p>
+                    }
                 </div>
             }
-            
+
             <div id="player-list" class="border-2 col-6">
-                @if (service.PlayerAnswering == null)
+                @if(service.PlayerAnswering == null)
                 {
-                    <h2>Wait for a Player to anser</h2>
+                    <h2>Wait for a player to answer</h2>
                 }
                 else
                 {
@@ -34,6 +37,7 @@
             </div>
         </div>
     </div>
+    @if(service.HostID != null){
     <div class="row">
         <div class="d-flex justify-content-around">
             @if(service.GameState == GameState.PlayerToAnswer)
@@ -51,23 +55,24 @@
             }
             else
             {
-            <button class="btn btn-warning p-5" @onclick="GetQuestion">
-                <span class="h3">
-                    New question
-                </span>
-            </button>
-            <button class="btn btn-danger p-5" @onclick="EndGame">
-                <span class="h3">
-                    End Game
-                </span>
-            </button>
-                
+                <button class="btn btn-warning p-5" @onclick="GetQuestion">
+                    <span class="h3">
+                        New question
+                    </span>
+                </button>
+                <button class="btn btn-danger p-5" @onclick="EndGame">
+                    <span class="h3">
+                        End Game
+                    </span>
+                </button>
+
             }
         </div>
-    </div> 
+    </div>
+    }
 </div>
 @code {
-    
+
 
 
 }

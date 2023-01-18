@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using TriviaRoyale.Client.Models;
 using TriviaRoyale.Server.Hubs;
 using TriviaRoyale.Server.Models;
 
@@ -60,7 +61,7 @@ namespace TriviaRoyale
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCookiePolicy();
 
             app.MapRazorPages();
             app.MapHub<QuizHub>(pattern: "/Quiz");
