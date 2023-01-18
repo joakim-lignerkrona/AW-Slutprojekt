@@ -37,20 +37,42 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
             await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
         }
+
+
+        //Host ser resultatet:
+
+        // 1. End game -> välj elimination round eller visa resultat.
+        // 2. om eliminiation round: 
+        // 2.1 Ny fråga från host: Om man ´svarar rätt -> välj att få +5 poäng eller reset all player points.
+
+        //Att göra: två knappar kopplade till två olika funktioner. alt. host frågar vilket val som ska göras.
+
         public async Task WrongHardAnswer(Player player)
         {
             var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
             roomPlayer.Points -= 3;
             await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
         }
-        public async Task CorrectHardAnswer(Player player)
+
+        public async Task CorrectHardAnswer(Player player) // Få 5 poäng
         {
             var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
             roomPlayer.Points += 5;
             await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
             await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
         }
-        public async Task PlayerClick(Player player)
+
+
+		// Ny funktion reset points - alla spelare förlorar sina poäng
+		//public async Task ResetPoints(Player player) // Ta bort alla poäng
+		//{
+		//	var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+		//	roomPlayer.Points += 5;
+		//	await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+		//	await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+		//}
+
+		public async Task PlayerClick(Player player)
         {
             await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
         }
@@ -77,6 +99,20 @@ namespace TriviaRoyale.Server.Hubs
         public async Task EndOfGame()
         {
             await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Ended);
+
+        } 
+        
+        public async Task EndGameOrEliminationRound()
+        {
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.EndOrElimination);
+
+        }
+
+		
+
+		public async Task EliminationRound() // Ny funktion -> gameState.Elimination/ HostDecision
+        {
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.HostElimination);
 
         }
         public override Task OnConnectedAsync()

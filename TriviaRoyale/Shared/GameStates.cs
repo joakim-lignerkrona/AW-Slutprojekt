@@ -6,6 +6,8 @@
         Playing,
         PlayerToAnswer,
         OpponentToAnswer,
-        Ended
+        HostElimination,
+		EndOrElimination,
+		Ended
     }
 }

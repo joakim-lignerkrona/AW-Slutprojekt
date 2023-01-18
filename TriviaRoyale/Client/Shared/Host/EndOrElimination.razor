@@ -1,0 +1,41 @@
+﻿@using System.Web;
+@using System.Text.Json;
+@using TriviaRoyale.Client.Shared.Components
+@using TriviaRoyale.Shared;
+@using TriviaRoyale.Shared.Questions;
+@using TriviaRoyale.Client.Shared.PlayerPage
+
+
+@inject PlayerService service;
+@inject NavigationManager navigation
+@inject HostService service
+
+<h3>EndOrElimination</h3>
+
+
+
+    <button class="btn btn-warning p-5" @onclick="ToElimination">
+        <span class="h3">
+            Elimination round!
+        </span>
+    </button>
+
+<button class="btn btn-warning p-5" @onclick="GameEnded">
+        <span class="h3">
+           END GAME!
+        </span>
+    </button>
+
+@code {
+    private async Task GameEnded()
+    {
+        await service.hubConnection.SendAsync("EndOfGame");
+
+    }
+
+    private async Task ToElimination()
+    {
+        await service.hubConnection.SendAsync("EliminationRound");
+
+    }
+}

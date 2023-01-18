@@ -3,6 +3,9 @@
 @using TriviaRoyale.Client.Shared.Components
 @using TriviaRoyale.Shared;
 @using TriviaRoyale.Shared.Questions;
+@using TriviaRoyale.Client.Shared.PlayerPage
+
+
 @inject PlayerService service;
 @inject NavigationManager navigation
 @inject HostService service
@@ -10,9 +13,9 @@
 
 <h2>Result:</h2>
 
+
 @foreach (var player in players)
 {
-
     <table class="table table-condensed">
         <tr>
             <th>Position</th>
@@ -28,11 +31,17 @@
     </table>
 }
 
-    <button class="btn btn-warning p-5" @onclick="GetHardQuestion">
+   @* <button class="btn btn-warning p-5" @onclick="ToElimination">
         <span class="h3">
             Elimination round!
         </span>
     </button>
+
+<button class="btn btn-warning p-5" @onclick="GameEnded">
+        <span class="h3">
+           END GAME!
+        </span>
+    </button>*@
     <div class="row">
         <div class="d-flex justify-content-around">
             @if (service.GameState == GameState.PlayerToAnswer)
@@ -48,14 +57,7 @@
                     </span>
                 </button>
             }
-            else
-            {
-                <button class="btn btn-warning p-5" @onclick="GetHardQuestion">
-                    <span class="h3">
-                        Elimination round!
-                    </span>
-                </button>
-            }
+            
         </div>
     </div>
 
@@ -68,6 +70,7 @@
 
     public bool winner { get; set; } = false;
 
+   
 
     async protected override Task OnInitializedAsync()
     {

@@ -14,8 +14,13 @@
     {
         switch(service.GameState)
         {
+
+   
             case GameState.Lobby:
                 <Lobby />
+                break;
+            case GameState.HostElimination:
+                <HostElimination />
                 break;
             case GameState.Playing:
                 <Playing />
@@ -28,6 +33,9 @@
                 break;
             case GameState.Ended:
                 <Ended />
+                break;
+            case GameState.EndOrElimination:
+                <EndOrElimination />
                 break;
 
             default:
