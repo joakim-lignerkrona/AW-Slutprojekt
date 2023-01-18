@@ -13,25 +13,32 @@
 
 <h2>Result:</h2>
 
+<table class="table table-dark table-striped">
+    <thead>
 
-@foreach (var player in players)
-{
-    <table class="table table-condensed">
         <tr>
             <th>Position</th>
             <th>Name</th>
             <th>Points</th>
         </tr>
-        <tr>
-            <td>@(i++)</td>
+    </thead>
+    <tbody>
+        @for(int i = 0; i < players.Count; i++)
+        {
+            var player = players[i];
+            <tr>
+            <td>@(i + 1)</td>
             <td>@player.Name</td>
             <td>@player.Points</td>
         </tr>
-        
-    </table>
-}
+        }
+    @foreach(var player in players)
+    {
+    }
+    </tbody>
+</table>
 
-   @* <button class="btn btn-warning p-5" @onclick="ToElimination">
+@* <button class="btn btn-warning p-5" @onclick="ToElimination">
         <span class="h3">
             Elimination round!
         </span>
@@ -42,26 +49,21 @@
            END GAME!
         </span>
     </button>*@
-    <div class="row">
-        <div class="d-flex justify-content-around">
-            @if (service.GameState == GameState.PlayerToAnswer)
-            {
-                <button class="btn btn-danger p-5" @onclick="HandleWrongAnswer">
-                    <span class="h3">
-                        Wrong
-                    </span>
-                </button>
-                <button class="btn btn-success p-5" @onclick="HandleCorrectAnswer">
-                    <span class="h3">
-                        Correct!
-                    </span>
-                </button>
-            }
-            
-        </div>
-    </div>
+<div class="row">
+    <div class="d-flex justify-content-around">
 
-    @code {
+        <button class="btn btn-outline-success p-5" @onclick="NewGame">
+            <span class="h3">
+                New Game
+            </span>
+        </button>
+
+
+
+    </div>
+</div>
+
+@code {
     public List<Question> hardQuestions { get; set; }
     public Question hardQuestion { get; set; }
     int i = 1;
@@ -70,7 +72,7 @@
 
     public bool winner { get; set; } = false;
 
-   
+
 
     async protected override Task OnInitializedAsync()
     {
@@ -90,7 +92,7 @@
         HttpClient httpClient = new();
 
         var q = await httpClient.GetAsync(url);
-        if (q.IsSuccessStatusCode)
+        if(q.IsSuccessStatusCode)
         {
             // Read the response content
             var content = await q.Content.ReadAsStringAsync();
@@ -113,10 +115,15 @@
         await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
         service.ClearPlayerIsAnswering();
     }
+    async Task NewGame()
+    {
+        service.ClearPlayerIsAnswering();
+        await service.hubConnection.InvokeAsync("NewGame");
+    }
     async Task HandleCorrectAnswer()
     {
         service.PlayerAnswering.Points = +5;
         await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
         service.ClearPlayerIsAnswering();
     }
-    }
+}
