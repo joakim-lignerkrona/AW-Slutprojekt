@@ -21,6 +21,7 @@
 
     private async Task WhoClicked()
     {
+        Console.WriteLine("Clicked");
         await service.hubConnection.SendAsync("PlayerClick", service.Player);
     }
 
