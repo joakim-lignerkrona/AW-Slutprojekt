@@ -21,25 +21,8 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             service.OnChange += StateHasChanged;
             await GetQuestions();
             GetQuestion();
-            await GetHardQuestions();
+            //await GetHardQuestions();
         }
-
-        //private async Task PlayerGuess()
-        //{
-        //    if(CorrectAnswer)
-        //    {
-        //        service.PlayerAnswering.Points++;
-        //        //Koppla samman detta med listan av players?
-        //        //Vänta på knapptryck av hosten för att komma tillbax
-        //    }
-        //    else
-        //    {
-        //        service.GameRoundPlayers.Remove(service.PlayerAnswering);
-        //        //Se till att denna spelare inte får gissa på DENNA frågan igen.
-        //        //Vänta på knapptryck av hosten för att komma tillbax (igen)? eller? Countdown kanske?
-        //        //await PlayerGuess();
-        //    }
-        //}
 
         async Task GetQuestions()
         {
@@ -57,22 +40,6 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
                 StateHasChanged();
             }
         }
-        async Task GetHardQuestions()
-        {
-            string url = navigation.BaseUri + "api/Questions/";
-            HttpClient httpClient = new();
-
-            var q = await httpClient.GetAsync(url);
-            if (q.IsSuccessStatusCode)
-            {
-                // Read the response content
-                var content = await q.Content.ReadAsStringAsync();
-                // Deserialize the content into an object
-                var json = JsonSerializer.Deserialize<Question[]>(content);
-                hardQuestions = json.ToList();
-                StateHasChanged();
-            }
-        }
 
         void GetQuestion()
         {
@@ -82,17 +49,33 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             service.ClearPlayerIsAnswering();
             StateHasChanged();
         }
-        void GetHardQuestion()
-        {
-            var index = Random.Shared.Next(0, questions.Count);
-            question = hardQuestions[index];
-            hardQuestions.RemoveAt(index);
-            service.ClearPlayerIsAnswering();
-        }
+  //      async Task GetHardQuestions()
+  //      {
+  //          string url = navigation.BaseUri + "api/Questions/";
+  //          HttpClient httpClient = new();
 
-        async Task EndGame()
+  //          var q = await httpClient.GetAsync(url);
+  //          if (q.IsSuccessStatusCode)
+  //          {
+  //              // Read the response content
+  //              var content = await q.Content.ReadAsStringAsync();
+  //              // Deserialize the content into an object
+  //              var json = JsonSerializer.Deserialize<Question[]>(content);
+  //              hardQuestions = json.ToList();
+  //              StateHasChanged();
+  //          }
+  //      }
+		//void GetHardQuestion()
+		//{
+		//	var index = Random.Shared.Next(0, questions.Count);
+		//	question = hardQuestions[index];
+		//	hardQuestions.RemoveAt(index);
+		//	service.ClearPlayerIsAnswering();
+		//	StateHasChanged();
+		//}
+
+		async Task EndGame()
         {
-            GetHardQuestion();
             service.ClearPlayerIsAnswering();
             await service.hubConnection.InvokeAsync("EndOfGame");
         }
@@ -103,7 +86,6 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         }
         async Task HandleCorrectAnswer()
         {
-            service.PlayerAnswering.Points++;
             await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
             service.ClearPlayerIsAnswering();
         }

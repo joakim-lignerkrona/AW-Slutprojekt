@@ -37,7 +37,19 @@ namespace TriviaRoyale.Server.Hubs
             await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
             await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
         }
-
+        public async Task WrongHardAnswer(Player player)
+        {
+            var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+            roomPlayer.Points -= 3;
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+        }
+        public async Task CorrectHardAnswer(Player player)
+        {
+            var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+            roomPlayer.Points += 5;
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+            await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+        }
         public async Task PlayerClick(Player player)
         {
             await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player, GameState.PlayerToAnswer);
