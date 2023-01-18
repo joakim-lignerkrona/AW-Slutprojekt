@@ -1,0 +1,33 @@
+﻿body {
+    background-color: forestgreen;
+}
+
+div.component-body {
+    margin: 0;
+    padding: 1rem;
+    min-height: 100vh;
+}
+
+div.flash {
+    animation: linear .5s flashing;
+    animation-iteration-count: 3;
+}
+
+@keyframes flashing{
+    0% {
+        background: inherit;
+    }
+    25% {
+        background-color: forestgreen;
+    }
+    50% {
+        background: inherit;
+    }
+
+    75% {
+        background-color: forestgreen;
+    }
+    100% {
+        background: inherit;
+    }
+}
