@@ -29,10 +29,10 @@ namespace TriviaRoyale.Server.Controllers
 			return Ok(service.GetQuestions());
 		}
 
-		[HttpGet("hardquestions")]
-		public Question[] GetHardList()
-		{
-			return service.GetHardQuestions();
-		}
+		//[HttpGet("hardquestions")]
+		//public Question[] GetHardList()
+		//{
+		//	return service.GetHardQuestions();
+		//}
 	}
 }

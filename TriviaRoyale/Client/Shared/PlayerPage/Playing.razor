@@ -25,9 +25,10 @@
         await service.hubConnection.InvokeAsync("PlayerClick", service.Player);
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         service.OnChange += StateHasChanged;
+
     }
 
     public void Dispose()

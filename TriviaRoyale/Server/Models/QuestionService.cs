@@ -8,7 +8,7 @@ namespace TriviaRoyale.Server.Models
 	public class QuestionService
 	{
 		List<Question> questions;
-		List<Question> hardQuestions;
+		//List<Question> hardQuestions;
 
 		public QuestionService()
 		{
@@ -35,10 +35,10 @@ namespace TriviaRoyale.Server.Models
 
 			return questions.ToArray();
 		}
-		public Question[] GetHardQuestions()
-		{
+		//public Question[] GetHardQuestions()
+		//{
 
-			return hardQuestions.ToArray();
-		}
+		//	return hardQuestions.ToArray();
+		//}
 	}
 }
