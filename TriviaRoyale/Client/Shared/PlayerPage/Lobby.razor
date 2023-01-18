@@ -4,20 +4,23 @@
 @inject PlayerService service;
 
 
-<h3 class="mt-4 mb-2">@service.Player.Name Ready!</h3>
-<h4>Waiting for host to start</h4>
-
-<h5 class="mt-4 mb-2">Players in the lobby:</h5>
-<div class="d-flex flex-column bg-dark p-3 rounded-4">
-
-	@foreach (var player in service.Players)
-	{
-		<PlayerComponent Player="player" />
-	}
-
+<div class="flex-grow-1 col-12 col-md-9 col-lg-6 d-flex flex-column bg-dark p-3 rounded-4">
+<h1 class="mt-4 mb-2 text-light">@service.Player.Name Ready!</h1>
+<h5 class="mt-4 mb-2 text-light">Players in the lobby:</h5>
+    <div class="d-flex  flex-wrap">
+        @foreach(var player in service.Players)
+        {
+            <PlayerComponent Player="player" />
+        }
+    </div>
+    <div class="flex-grow-1 d-flex justify-content-center align-items-center text-light">
+        <h5 class="me-3">Waiting for host to start the game... </h5>
+        <span class="spinner-border" role="status"></span>
+    </div>
+    
 </div>
-@*<button class="btn btn-primary" @onclick="GoToGame">Simulate host is ready button</button>
-*@
+
+
 @code {
 	private async Task GoToGame()
 	{

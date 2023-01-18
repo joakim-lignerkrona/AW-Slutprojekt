@@ -4,50 +4,55 @@
 @*<button class="btn btn-primary p-2" type="submit" @onclick="GameEnded" @onclick:preventDefault>Simulate Game Over</button>
 <button class="btn btn-primary p-2" type="submit" @onclick="NewQuestion" @onclick:preventDefault>Simulate New Question</button>
 *@
-@if(isAnswering)
-{
-	
-<h3>PlayerToAnswer: @service.Player.Name</h3>
-<p>Points: @service.Player.Points</p>
-<p>RoomID: @service.Player.RoomID</p>
+<div class="component-body d-flex flex-column justify-content-center align-items-center @(isAnswering ? "flash":"bg-dark")">
 
-}
-else
-{
-	<h1>Wait while @service.PlayerAnswering is answering </h1>
-}
+    @if(isAnswering)
+    {
+
+        <h1>Give your answer!</h1>
+
+    }
+    else
+    {
+        <div class="d-flex flex-column">
+            <h1 class="text-light mb-5">Too slow! </h1>
+            <h4 class="text-light">Player to answer:</h4>
+            <TriviaRoyale.Client.Shared.Components.PlayerComponent Player="service.PlayerAnswering" />
+        </div>
+    }
+</div>
 
 @code {
 
-	public bool isAnswering { get; set; } = false;
-
-	
-
-	protected override void OnInitialized()
-	{
-		if (service.Player.Name == service.PlayerAnswering.Name)
-		{
-			isAnswering = true;
-		}
-		else
-			isAnswering = false;
-
-			StateHasChanged();
-
-		base.OnInitialized();
-	}
+    public bool isAnswering { get; set; } = false;
 
 
-	private async Task NewQuestion()
-	{
-		await service.hubConnection.SendAsync("StartGame");
 
-	}
+    protected override void OnInitialized()
+    {
+        if(service.Player.Name == service.PlayerAnswering.Name)
+        {
+            isAnswering = true;
+        }
+        else
+            isAnswering = false;
 
-	private async Task GameEnded()
-	{
-		await service.hubConnection.SendAsync("EndOfGame");
+        StateHasChanged();
 
-	}
+        base.OnInitialized();
+    }
+
+
+    private async Task NewQuestion()
+    {
+        await service.hubConnection.SendAsync("StartGame");
+
+    }
+
+    private async Task GameEnded()
+    {
+        await service.hubConnection.SendAsync("EndOfGame");
+
+    }
 
 }

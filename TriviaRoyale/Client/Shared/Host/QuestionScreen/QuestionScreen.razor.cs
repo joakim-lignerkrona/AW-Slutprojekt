@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Text.Json;
 using TriviaRoyale.Shared.Questions;
 
-
 namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 {
     public partial class QuestionScreen
@@ -17,6 +16,7 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         async protected override void OnInitialized()
         {
+            service.OnChange += StateHasChanged;
             await GetQuestions();
         }
 
@@ -65,19 +65,30 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             var index = Random.Shared.Next(0, questions.Count);
             question = questions[index];
             questions.RemoveAt(index);
+            service.ClearPlayerIsAnswering();
+            StateHasChanged();
         }
 
         async Task EndGame()
         {
+            service.ClearPlayerIsAnswering();
             await service.hubConnection.InvokeAsync("EndOfGame");
         }
         async Task HandleWrongAnswer()
         {
             await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
+            service.ClearPlayerIsAnswering();
         }
         async Task HandleCorrectAnswer()
         {
             await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
+            service.ClearPlayerIsAnswering();
+        }
+
+
+        public void Dispose()
+        {
+            service.OnChange -= StateHasChanged;
         }
     }
 }

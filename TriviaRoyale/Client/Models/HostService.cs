@@ -13,5 +13,11 @@ namespace TriviaRoyale.Client.Models
             });
         }
 
+        public void ClearPlayerIsAnswering()
+        {
+            PlayerAnswering = null;
+            NotifyStateChanged();
+        }
+
     }
 }

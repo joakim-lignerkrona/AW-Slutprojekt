@@ -43,6 +43,7 @@ namespace TriviaRoyale.Server.Controllers
 
 
 
+
         //SERVER SIDE
         //private void InsertList(List<QandA> list) 
         //{

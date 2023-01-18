@@ -2,20 +2,15 @@
 
 @inject PlayerService service;
 
-<p>@service.Player.Name</p>
-<p>@service.PlayerAnswering</p>
-
 
 
 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 96vh;">
-
-	<h3 class="mb-5">Press the button when you know the answer</h3>
-	<div class="w-100 flex-grow-1">
-
-		<button class="btn w-100 btn-primary p-3" style="height: 100%" @onclick="WhoClicked">
-			<span class="h1">ANSWER</span>
-		</button>
-	</div>
+    <h3 class="m-5">Tap the button when you know the answer</h3>
+    <div class="w-100 flex-grow-1">
+        <button class="btn w-100 btn-primary p-3" style="height: 100%" @onclick="WhoClicked">
+            <span class="h1">ANSWER</span>
+        </button>
+    </div>
 </div>
 
 @*Lägg till metod som skickar ett meddelande till servern om vem som tryckte på knappen först.*@
@@ -26,12 +21,7 @@
 
     private async Task WhoClicked()
     {
-        
         await service.hubConnection.SendAsync("PlayerClick", service.Player);
-
-
-        
-
     }
 
     protected override async Task OnInitializedAsync()
@@ -44,7 +34,7 @@
         service.OnChange -= StateHasChanged;
     }
 
-    //ClickerName
+        //ClickerName
 
 
 
@@ -68,6 +58,6 @@
     //        await service.hubConnection.SendAsync("AnswerButton2");
     //    }
     //}
-	//@*All kod ligger i Playing.razor.cs*@
+    //@*All kod ligger i Playing.razor.cs*@
 }
 

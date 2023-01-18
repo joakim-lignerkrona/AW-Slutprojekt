@@ -1,30 +1,34 @@
 ﻿@page "/Host/{RoomId}"
+@using TriviaRoyale.Client.Shared.Host
+@using TriviaRoyale.Client.Shared.Host.QuestionScreen
 @using TriviaRoyale.Shared;
 
 @inject HostService service;
 
+<PageTitle>Host - Quiz my app</PageTitle>
 
 
 
 
+<div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark">
 
-<PageTitle>Trivia Royale</PageTitle>
 
 @switch(service.GameState)
 {
 
     case GameState.Playing:
     case GameState.PlayerToAnswer:
-        <TriviaRoyale.Client.Shared.Host.QuestionScreen.QuestionScreen />
+        <QuestionScreen />
         break;
     case GameState.Ended:
-
+        <HostEnd />
         break;
     default:
         <PlayerJoinScreen />
         break;
 }
 
+</div>
 
 
 
