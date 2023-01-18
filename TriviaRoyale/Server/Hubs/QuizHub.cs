@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using TriviaRoyale.Client.Models;
 using TriviaRoyale.Server.Models;
 using TriviaRoyale.Shared;
 
@@ -19,7 +20,8 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task CreatePlayer(Player player)
         {
-            player.ID = Context.ConnectionId;
+            var cookie = Context.GetHttpContext().Request.Cookies["playerId"];
+            player.ID = cookie;
             Service.rooms.Find(x => x.Id == player.RoomID).AddPlayer(player);
             await Groups.AddToGroupAsync(player.ID, player.RoomID);
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());

@@ -16,6 +16,8 @@ namespace TriviaRoyale.Client
             builder.Services.AddSingleton<HostService>();
             builder.Services.AddSingleton<PlayerService>();
 
+            builder.Services.AddScoped<ICookie, Cookie>();
+
 
             await builder.Build().RunAsync();
         }

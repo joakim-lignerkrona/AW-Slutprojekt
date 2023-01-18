@@ -1,7 +1,10 @@
-﻿@using TriviaRoyale.Shared;
+﻿
+@using TriviaRoyale.Shared;
 @using TriviaRoyale.Client;
+
 @inject NavigationManager Navigation
 @inject PlayerService service;
+@inject ICookie cookie 
 
 
 
@@ -24,7 +27,6 @@
     private Player player = new Player();
     private bool ErrorMessageVisibility { get; set; } = false;
 
-
     private async Task CreatePlayer()
     {
 
@@ -35,6 +37,10 @@
         }
         ErrorMessageVisibility = false;
         player.RoomID = RoomID;
+        
+        player.ID = Guid.NewGuid().ToString();
+        
+       await cookie.SetValue("PlayerID", player.ID);
 
         await service.hubConnection.SendAsync("CreatePlayer", player);
         service.Player = player;
