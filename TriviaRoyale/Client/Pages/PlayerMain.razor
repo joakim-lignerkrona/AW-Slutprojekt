@@ -14,10 +14,14 @@
     {
         switch(service.GameState)
         {
+
+   
             case GameState.Lobby:
                 <Lobby />
                 break;
+            
             case GameState.Playing:
+            case GameState.EliminationRound:
                 <Playing />
                 break;
             case GameState.PlayerToAnswer:
@@ -29,7 +33,9 @@
             case GameState.Ended:
                 <Ended />
                 break;
-
+            case GameState.EndOrElimination:
+                <EndOrElimination />
+                break;
             default:
                 <PlayerJoin RoomID="roomID" />
                 break;

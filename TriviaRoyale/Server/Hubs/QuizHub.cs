@@ -79,6 +79,33 @@ namespace TriviaRoyale.Server.Hubs
             await ChangeStateAsync(GetRoomName(), GameState.Playing);
         }
 
+
+        //Host ser resultatet:
+
+        // 1. End game -> välj elimination round eller visa resultat.
+        // 2. om eliminiation round: 
+        // 2.1 Ny fråga från host: Om man ´svarar rätt -> välj att få +5 poäng eller reset all player points.
+
+        //Att göra: två knappar kopplade till två olika funktioner. alt. host frågar vilket val som ska göras.
+
+        //public async Task WrongHardAnswer(Player player)
+        //{
+        //    var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+        //    roomPlayer.Points -= 3;
+        //    await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+        //}
+
+        //public async Task CorrectHardAnswer(Player player) // Få 5 poäng
+        //{
+        //    var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+        //    roomPlayer.Points += 5;
+        //    await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.Playing);
+        //    await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
+        //}
+
+
+
+
         public async Task PlayerClick(Player player)
         {
             await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
@@ -110,6 +137,20 @@ namespace TriviaRoyale.Server.Hubs
             await ChangeStateAsync(GetRoomName(), GameState.Ended);
 
         }
+
+        public async Task EndGameOrEliminationRound()
+        {
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.EndOrElimination);
+
+        }
+
+
+
+        public async Task EliminationRound() // Ny funktion -> gameState.Elimination/ HostDecision
+        {
+            await Clients.Groups(GetRoomName()).SendAsync("StateChange", GameState.EliminationRound);
+
+        }
         public override Task OnConnectedAsync()
         {
             Console.WriteLine("User connected");
@@ -135,7 +176,6 @@ namespace TriviaRoyale.Server.Hubs
 
             await Clients.Group(roomName).SendAsync("ServerLog", $"{Context.ConnectionId} has left the group {roomName}.");
         }
-
 
         public async Task SendMessageToRoom(string roomName, string message)
         {

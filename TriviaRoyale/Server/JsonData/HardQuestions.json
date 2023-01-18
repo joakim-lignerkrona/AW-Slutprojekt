@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "questionText": "Which king is portraited as King of Hearts?",
+      "answer": "Charlemagne."
+    },
+    {
+      "questionText": "Order these in the correct chronological order. Wheels on luggage, The formal split up of Beetles & First man on the moon",
+      "answer": "First man on the Moon , Wheels on luggage, formal split up of beetles."
+    },
+    {
+      "questionText": "Who wrote the music for Backstreet Boys major hit 'Everybody'",
+      "answer": "Junior - Liquid Love."
+    },
+    {
+      "questionText": "Who played 'Jum-Jum' and 'Benke' in 'Mio min Mio'?",
+      "answer": "Christian Bale."
+    },
+    {
+      "questionText": "Which fruit share 50% of their DNA with humans?",
+      "answer": "The banana."
+    }
+  ]
+}

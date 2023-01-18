@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Text.Json;
+using TriviaRoyale.Shared;
 using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
@@ -12,34 +13,14 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         public bool CorrectAnswer { get; set; }
         public List<Question> questions { get; set; }
         public Question question { get; set; }
+        public List<Question> hardQuestions { get; set; }
 
 
         async protected override void OnInitialized()
         {
             service.OnChange += StateHasChanged;
             await GetQuestions();
-        }
-
-        private void PlayerGuess(Question question)
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task PlayerGuess()
-        {
-            if(CorrectAnswer)
-            {
-                service.PlayerAnswering.Points++;
-                //Koppla samman detta med listan av players?
-                //Vänta på knapptryck av hosten för att komma tillbax
-            }
-            else
-            {
-                //Se till att denna spelare inte får gissa på DENNA frågan igen.
-                //Vänta på knapptryck av hosten för att komma tillbax (igen)? eller? Countdown kanske?
-                await PlayerGuess();
-            }
-
+            await GetHardQuestions();
         }
 
         async Task GetQuestions()
@@ -53,26 +34,45 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
                 // Read the response content
                 var content = await q.Content.ReadAsStringAsync();
                 //// Deserialize the content into an object
-                ///
                 var json = JsonSerializer.Deserialize<Question[]>(content);
                 questions = json.ToList();
                 StateHasChanged();
             }
         }
 
-        async Task GetQuestion()
+        void GetQuestion()
         {
-            var index = Random.Shared.Next(0, questions.Count);
-            question = questions[index];
-            questions.RemoveAt(index);
+            int index;
+            var localQuestions = service.GameState == GameState.EliminationRound ? hardQuestions : questions;
+            index = Random.Shared.Next(0, localQuestions.Count);
+            question = localQuestions[index];
+            localQuestions.RemoveAt(index);
+
             service.ClearPlayerIsAnswering();
             StateHasChanged();
         }
+        async Task GetHardQuestions()
+        {
+            string url = navigation.BaseUri + "api/hardquestions/";
+            HttpClient httpClient = new();
 
-        async Task EndGame()
+            var q = await httpClient.GetAsync(url);
+            if(q.IsSuccessStatusCode)
+            {
+                // Read the response content
+                var content = await q.Content.ReadAsStringAsync();
+                // Deserialize the content into an object
+                var json = JsonSerializer.Deserialize<Question[]>(content);
+                hardQuestions = json.ToList();
+                StateHasChanged();
+            }
+        }
+
+
+        async Task EndOrEliminate()
         {
             service.ClearPlayerIsAnswering();
-            await service.hubConnection.InvokeAsync("EndOfGame");
+            await service.hubConnection.InvokeAsync("EndGameOrEliminationRound");
         }
         async Task HandleWrongAnswer()
         {
