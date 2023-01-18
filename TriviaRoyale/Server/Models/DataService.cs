@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 using TriviaRoyale.Shared.Questions;
 
 namespace TriviaRoyale.Server.Models
@@ -11,12 +12,12 @@ namespace TriviaRoyale.Server.Models
 
         public DataService()
         {
-            string path = Path.Combine(Environment.CurrentDirectory, @"JsonData\disney.json");
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\disney.json");
             string jsonString = File.ReadAllText(path);
             Questions listOfQuestions = JsonSerializer.Deserialize<Questions>(jsonString)!;
             this.questions = new List<Question>(listOfQuestions.questions);
 
-            string hardPath = Path.Combine(Environment.CurrentDirectory, @"JsonData\HardQuestions.json");
+            string hardPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), @"JsonData\HardQuestions.json");
             string HardJsonString = File.ReadAllText(hardPath);
             Questions tempQuestions = JsonSerializer.Deserialize<Questions>(HardJsonString)!;
             this.hardQuestions = new List<Question>(tempQuestions.questions);
@@ -26,7 +27,7 @@ namespace TriviaRoyale.Server.Models
         {
 
             return questions.ToArray();
-        }        
+        }
         public Question[] GetHardQuestions()
         {
 
