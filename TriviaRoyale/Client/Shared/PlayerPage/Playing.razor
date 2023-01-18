@@ -21,7 +21,8 @@
 
     private async Task WhoClicked()
     {
-        await service.hubConnection.SendAsync("PlayerClick", service.Player);
+        Console.WriteLine("Clicked");
+        await service.hubConnection.InvokeAsync("PlayerClick", service.Player);
     }
 
     protected override async Task OnInitializedAsync()

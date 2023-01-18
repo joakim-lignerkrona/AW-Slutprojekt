@@ -49,6 +49,7 @@ namespace TriviaRoyale.Client.Models
             hubConnection.On<string>("ServerLog", Console.WriteLine);
             hubConnection.On<string>("PlayerIsAnswering", (playerID) =>
             {
+                Console.WriteLine($"Player is answering: {playerID}");
                 PlayerAnswering = Players.FirstOrDefault(p => p.ID == playerID);
                 NotifyStateChanged();
             });
