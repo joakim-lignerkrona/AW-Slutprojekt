@@ -5,8 +5,7 @@ using TriviaRoyale.Shared.Questions;
 namespace TriviaRoyale.Server.Controllers
 {
 	[Route("api/")]
-	[ApiController]
-	public class QuestionController : ControllerBase
+	public class QuestionController : Controller
 	{
 
 		private readonly DataService service;
