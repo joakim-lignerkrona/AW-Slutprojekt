@@ -12,12 +12,14 @@ namespace TriviaRoyale.Server.Controllers
         QRService service;
         IHubContext<QuizHub> hubContext;
         private readonly RoomService roomService;
+        private readonly DataService dataService;
 
-        public QRController(QRService service, IHubContext<QuizHub> hubContext, RoomService roomService)
+        public QRController(QRService service, IHubContext<QuizHub> hubContext, RoomService roomService, DataService dataService)
         {
             this.service = service;
             this.hubContext = hubContext;
             this.roomService = roomService;
+            this.dataService = dataService;
         }
         [HttpGet("/qr/{url}")]
         public IActionResult QR(string url)
@@ -39,6 +41,11 @@ namespace TriviaRoyale.Server.Controllers
         {
 
             return roomService.rooms.ToArray();
+        }
+        [HttpGet("questions")]
+        public IActionResult GetList()
+        {
+            return Ok(dataService.GetQuestions());
         }
     }
 }
