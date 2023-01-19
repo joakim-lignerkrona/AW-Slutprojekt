@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Timers;
 using TriviaRoyale.Server.Models;
 using TriviaRoyale.Shared;
 
@@ -30,6 +31,18 @@ namespace TriviaRoyale.Server.Hubs
             {
                 room.HostID = hostID;
                 await Clients.Caller.SendAsync("HostAccepted", hostID);
+                room.OnChange += () =>
+                {
+
+                    var timer = new System.Timers.Timer(100); // run every minute
+                    timer.Elapsed += async (object sender, ElapsedEventArgs e) =>
+                    {
+                        await GetConnectedPlayers(room.Id);
+
+                    };
+                    timer.Start();
+                    return;
+                };
 
             }
             else if(room.HostID == cookie)
@@ -52,8 +65,11 @@ namespace TriviaRoyale.Server.Hubs
             {
                 player.isActive = false;
             }
+            if(room.Players.FirstOrDefault(p => p.SocketID == player.SocketID) == null)
+            {
 
-            room.AddPlayer(player);
+                room.AddPlayer(player);
+            }
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await Clients.Caller.SendAsync("PlayerCreated", player);
         }
@@ -66,6 +82,7 @@ namespace TriviaRoyale.Server.Hubs
                 player.isActive = true;
                 player.InactiveSince = null;
                 player.SocketID = Context.ConnectionId;
+                Console.WriteLine($"{player.Name} Reconnected");
                 await Clients.Caller.SendAsync("PlayerCreated", player);
                 await GetStateAsync(roomID);
             }
@@ -74,6 +91,8 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task WrongAnswer(Player player)
         {
+            var room = Service.rooms.Find(x => x.Id == player.RoomID);
+            room.OpenQuestion();
             await ChangeStateAsync(GetRoomName(), GameState.Playing);
 
         }
@@ -92,7 +111,9 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task CorrectAnswer(Player player)
         {
-            var roomPlayer = Service.rooms.Find(x => x.Id == player.RoomID).Players.Find(x => x.ID == player.ID);
+            var room = Service.rooms.Find(x => x.Id == player.RoomID);
+            room.OpenQuestion();
+            var roomPlayer = room.Players.Find(x => x.ID == player.ID);
             roomPlayer.Points++;
             await Clients.Groups(GetRoomName()).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await ChangeStateAsync(GetRoomName(), GameState.Playing);
@@ -127,14 +148,19 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task PlayerClick(Player player)
         {
-            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
+            var room = Service.rooms.Find(r => r.Id == player.RoomID);
+            room.PlayerDidAnswer(player);
+            await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", room.PlayerAnswering);
             await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
         }
 
 
         public async Task GetConnectedPlayers(string roomName)
         {
-            await Clients.Caller.SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == roomName).Players.ToArray());
+            var room = Service.rooms.Find(x => x.Id == roomName);
+            var players = room.Players;
+            var parray = players.ToArray();
+            await Clients.Caller.SendAsync("NewPlayer", parray);
 
         }
 
@@ -185,6 +211,7 @@ namespace TriviaRoyale.Server.Hubs
                     x.isActive = false;
                     x.InactiveSince = DateTime.Now;
                 }
+                Console.WriteLine($"{x.Name} disconnected");
             });
             return base.OnDisconnectedAsync(exception);
         }

@@ -4,7 +4,7 @@
 @*<button class="btn btn-primary p-2" type="submit" @onclick="GameEnded" @onclick:preventDefault>Simulate Game Over</button>
 <button class="btn btn-primary p-2" type="submit" @onclick="NewQuestion" @onclick:preventDefault>Simulate New Question</button>
 *@
-<div class="component-body d-flex flex-column justify-content-center align-items-center @(isAnswering ? "flash":"bg-dark")">
+<div class="component-body w-100 d-flex flex-column justify-content-center align-items-center @(isAnswering ? "flash":"bg-dark")">
 
     @if(isAnswering)
     {
