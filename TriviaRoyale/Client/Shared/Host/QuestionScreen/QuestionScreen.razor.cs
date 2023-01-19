@@ -20,7 +20,7 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
         {
             service.OnChange += StateHasChanged;
             await GetQuestions();
-            await GetHardQuestions();
+            //await GetHardQuestions();
         }
 
         async Task GetQuestions()
