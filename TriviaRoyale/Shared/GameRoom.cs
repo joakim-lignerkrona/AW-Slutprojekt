@@ -44,6 +44,7 @@ namespace TriviaRoyale.Shared
         }
         public void NewGame()
         {
+            Players.RemoveAll(p => !p.isActive);
             Players.ForEach(p => p.Points = 0);
         }
 
