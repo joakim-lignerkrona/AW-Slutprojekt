@@ -150,6 +150,7 @@ namespace TriviaRoyale.Server.Hubs
         {
             var room = Service.rooms.Find(r => r.Id == player.RoomID);
             room.PlayerDidAnswer(player);
+
             await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", room.PlayerAnswering);
             await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
         }
