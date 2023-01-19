@@ -16,6 +16,12 @@ namespace TriviaRoyale.Server.Hubs
         {
             await Clients.Groups(GetRoomName()).SendAsync("ReceiveAnswer", answer);
         }
+        public async Task NewGame()
+        {
+            Service.rooms.Find(r => r.Id == GetRoomName()).NewGame();
+            await ChangeStateAsync(GetRoomName(), GameState.Lobby);
+        }
+
         public async Task RegisterHost(string hostID, string roomID)
         {
             var room = Service.rooms.FirstOrDefault(r => r.Id == roomID);

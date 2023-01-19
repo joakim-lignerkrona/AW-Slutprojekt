@@ -19,44 +19,44 @@
 @if(winner)
 {
 
-	<h1 class="btn btn-success">YOU WIN!</h1>
-	<p class="btn btn-info">Points: @service.Player.Points</p>
+	<h1 class="text-light bg-success">YOU WIN!</h1>
+	<p class="text-light">Points: @service.Player.Points</p>
 
 
 }
 else
 {
-	<h1 class="btn btn-danger">YOU LOSE </h1>
-	<p class="btn btn-info">Winner: @players[0].Name  </p>
-	<p class="btn btn-info">Winner score: @players[0].Points  </p>
-	<p class="btn btn-info">Points: @service.Player.Points</p>
+	<h1 class="text-light bg-danger">YOU LOSE </h1>
+	<p class="text-light">You scored: @service.Player.Points</p>
+	<p class="text-light">@players[0].Name won with @players[0].Points points</p>
 
 }
 
 <h2>Result:</h2>
 
-@foreach(var player in service.Players)
-{
+<table class="table table-dark table-striped">
+	<thead>
 
-
-
-	<table class="table table-condensed">
 		<tr>
 			<th>Position</th>
 			<th>Name</th>
 			<th>Points</th>
 		</tr>
-		<tr>
-			<td>@(i++)</td>
-			<td>@player.Name</td>
-			<td>@player.Points</td>
-		</tr>
-
-	</table>
-}
+	</thead>
+	<tbody>
+		@for(int i = 0; i < players.Count; i++)
+		{
+			var player = players[i];
+			<tr>
+				<td>@(i + 1)</td>
+				<td>@player.Name</td>
+				<td>@player.Points</td>
+			</tr>
+		}
+	</tbody>
+</table>
 @code {
 
-	int i = 1;
 
 	List<Player> players;
 
@@ -77,8 +77,8 @@ else
 
 		StateHasChanged();
 
-		return base.OnInitializedAsync();
 		base.OnInitialized();
+		return base.OnInitializedAsync();
 	}
 
 
