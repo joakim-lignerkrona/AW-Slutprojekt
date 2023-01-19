@@ -65,8 +65,11 @@ namespace TriviaRoyale.Server.Hubs
             {
                 player.isActive = false;
             }
+            if(room.Players.FirstOrDefault(p => p.SocketID == player.SocketID) == null)
+            {
 
-            room.AddPlayer(player);
+                room.AddPlayer(player);
+            }
             await Clients.Groups(player.RoomID).SendAsync("NewPlayer", Service.rooms.Find(x => x.Id == player.RoomID).Players.ToArray());
             await Clients.Caller.SendAsync("PlayerCreated", player);
         }
