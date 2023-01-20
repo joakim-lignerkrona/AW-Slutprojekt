@@ -155,7 +155,7 @@ namespace TriviaRoyale.Server.Hubs
 
 			}
 
-			await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", room.PlayerAnswering);
+			await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
 			await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
 		}
 

@@ -42,17 +42,18 @@ namespace TriviaRoyale.Client.Models
 
 			hubConnection.On<Player>("PlayerIsAnswering", (player) =>
 			{
-				PlayerAnswering = player;
+				if(PlayerAnswering == null)
+					PlayerAnswering = player;
 				NotifyStateChanged();
 			});
 
 			hubConnection.On<string>("ServerLog", Console.WriteLine);
-			hubConnection.On<string>("PlayerIsAnswering", (playerID) =>
-			{
-				Console.WriteLine($"Player is answering: {playerID}");
-				PlayerAnswering = Players.FirstOrDefault(p => p.ID == playerID);
-				NotifyStateChanged();
-			});
+			//hubConnection.On<string>("PlayerIsAnswering", (playerID) =>
+			//{
+			//	Console.WriteLine($"Player is answering: {playerID}");
+			//	PlayerAnswering = Players.FirstOrDefault(p => p.ID == playerID);
+			//	NotifyStateChanged();
+			//});
 			hubConnection.On("OpenQuestion", () =>
 			{
 				PlayerAnswering = null;
@@ -60,6 +61,10 @@ namespace TriviaRoyale.Client.Models
 			});
 			hubConnection.On<GameState>("StateChange", (state) =>
 			{
+				if(state == GameState.Playing)
+				{
+					PlayerAnswering = null;
+				}
 				GameState = state;
 				NotifyStateChanged();
 			});
