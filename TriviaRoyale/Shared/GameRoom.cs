@@ -52,11 +52,8 @@ namespace TriviaRoyale.Shared
 		public void PlayerDidAnswer(Player player)
 		{
 
-			if(PlayerAnswering == null)
-			{
-				PlayerAnswering = player;
-			}
 
+			PlayerAnswering = player;
 
 		}
 
