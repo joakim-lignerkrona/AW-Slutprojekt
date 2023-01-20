@@ -51,14 +51,13 @@ namespace TriviaRoyale.Shared
 
 		public void PlayerDidAnswer(Player player)
 		{
-			lock(PlayerAnswering)
-			{
-				if(PlayerAnswering == null)
-				{
-					PlayerAnswering = player;
-				}
 
+			if(PlayerAnswering == null)
+			{
+				PlayerAnswering = player;
 			}
+
+
 		}
 
 		public void OpenQuestion()
