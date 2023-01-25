@@ -30,7 +30,7 @@
 
     protected override void OnInitialized()
     {
-        if(service.Player.Name == service.PlayerAnswering.Name)
+        if(service.Player.ID == service.PlayerAnswering.ID)
         {
             isAnswering = true;
         }
