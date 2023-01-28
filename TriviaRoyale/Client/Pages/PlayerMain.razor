@@ -5,10 +5,12 @@
 @inject PlayerService service;
 
 <div class="d-flex flex-column justify-content-evenly align-items-center w-100 vh-100 bg-dark text-light">
+    
 
     @if(service.Player == null)
     {
         <PlayerJoin RoomID="@RoomID" />
+        <audio controls muted><source src="/success-1.mp3" /></audio>
     }
     else
     {
