@@ -22,10 +22,7 @@ namespace TriviaRoyale
 
 
 
-			builder.Services.AddSignalR().AddJsonProtocol(options =>
-			{
-				options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-			});
+			builder.Services.AddSignalR();
 
 
 			builder.Services.AddSwaggerGen();
