@@ -41,12 +41,12 @@
         </div>*@
             <label for="emoji-selector">Select Emoji:</label>
             <br>
-        <div class="form-group emoji-selector m-3">
+        <div class="form-group d-flex flex-wrap justify-content-evenly emoji-selector m-3">
 
 
             @for(int i = 0; i < emojis.Length; i++)
             {
-                <div class="form-check form-check-inline my-2">
+                <div class="form-check form-check-inline pl-0 px-1 me-0 my-2">
                     <input class="btn-check" type="radio" name="emoji-selector" id=@($"emoji{i}") value=@(i) @onchange="SelectedEmoji">
                     <label class="btn btn-outline-primary" for=@($"emoji{i}")><span class="h1">@emojis[i]</span>   </label>
                 </div>
