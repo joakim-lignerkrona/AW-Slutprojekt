@@ -209,15 +209,22 @@ namespace TriviaRoyale.Server.Hubs
 		}
 		public override Task OnDisconnectedAsync(Exception exception)
 		{
-			Service.rooms.Find(x => x.Id == GetRoomName()).Players.ForEach(x =>
+			try
 			{
-				if(x.SocketID == Context.ConnectionId)
+				Service.rooms.Find(x => x.Id == GetRoomName()).Players.ForEach(x =>
 				{
-					x.isActive = false;
-					x.InactiveSince = DateTime.Now;
-				}
-				Console.WriteLine($"{x.Name} disconnected");
-			});
+					if(x.SocketID == Context.ConnectionId)
+					{
+						x.isActive = false;
+						x.InactiveSince = DateTime.Now;
+					}
+				});
+			}
+			catch(Exception)
+			{
+				Console.WriteLine("Player not in game left");
+			}
+
 			return base.OnDisconnectedAsync(exception);
 		}
 

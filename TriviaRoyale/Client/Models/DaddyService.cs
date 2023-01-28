@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using TriviaRoyale.Shared;
 
 namespace TriviaRoyale.Client.Models
@@ -31,6 +32,11 @@ namespace TriviaRoyale.Client.Models
 			Console.WriteLine(Navigation.BaseUri + "Quiz");
 			hubConnection = new HubConnectionBuilder()
 				.WithUrl(Navigation.BaseUri + "Quiz")
+				.AddJsonProtocol(options =>
+				{
+					options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+				})
+				.WithAutomaticReconnect()
 				.Build();
 
 			hubConnection.On<Player[]>("NewPlayer", (players) =>
