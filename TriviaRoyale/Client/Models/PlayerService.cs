@@ -29,7 +29,7 @@ namespace TriviaRoyale.Client.Models
 
             hubConnection.On<Player>("PlayerIsAnswering", (player) =>
             {
-                PlayerAnswering = player;
+
                 if(player.ID == Player.ID)
                 {
                     JsRuntime.InvokeVoidAsync("playSound", "success-1.mp3");

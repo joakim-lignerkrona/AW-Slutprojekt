@@ -2,12 +2,14 @@
 var myAudioContext
 let isUsingWebkit = false
 console.log("WebkitSoundPlayer.js loaded")
-if ('webkitAudioContext' in window) {
-    console.log("webkitAudioContext found")
-    myAudioContext = new webkitAudioContext();
-    isUsingWebkit = true
-}
-
+window.addEventListener("load", () => {
+    console.log("window.onload")
+    if ('webkitAudioContext' in window) {
+        console.log("webkitAudioContext found")
+        myAudioContext = new webkitAudioContext();
+        isUsingWebkit = true
+    }
+})
 function loadSound(Path) {
     if (isUsingWebkit) {
 
