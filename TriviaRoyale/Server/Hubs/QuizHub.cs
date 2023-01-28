@@ -149,12 +149,14 @@ namespace TriviaRoyale.Server.Hubs
 		public async Task PlayerClick(Player player)
 		{
 			var room = Service.rooms.Find(r => r.Id == player.RoomID);
+
 			lock(room)
 			{
 				room.PlayerDidAnswer(player);
 
 			}
-
+			Console.WriteLine($"{player.Name} want's to answer in {room.Id}");
+			await SendMessageToAll($"{player.Name} want's to answer in {room.Id}");
 			await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
 			await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
 		}
@@ -251,7 +253,10 @@ namespace TriviaRoyale.Server.Hubs
 		{
 			await Clients.Group(roomName).SendAsync("ReceiveAnswer", $"Message: {message}");
 		}
-
+		public async Task SendMessageToAll(string message)
+		{
+			await Clients.All.SendAsync("ReceiveAnswer", $"Message: {message}");
+		}
 
 		string GetRoomName()
 		{
