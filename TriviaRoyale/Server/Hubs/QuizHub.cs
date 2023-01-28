@@ -87,6 +87,12 @@ namespace TriviaRoyale.Server.Hubs
                 await GetStateAsync(roomID);
             }
         }
+        public async void NewQuestion()
+        {
+            var room = Service.rooms.Find(x => x.Id == GetRoomName());
+            room.NewQuestion();
+            await ChangeStateAsync(GetRoomName(), GameState.Playing);
+        }
 
 
         public async Task WrongAnswer(Player player)

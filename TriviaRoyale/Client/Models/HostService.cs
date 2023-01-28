@@ -27,9 +27,11 @@ namespace TriviaRoyale.Client.Models
 
         }
 
-        public void ClearPlayerIsAnswering()
+        
+        public void NewQuestion()
         {
-            PlayerAnswering = null;
+            
+            hubConnection.SendAsync("NewQuestion");
             NotifyStateChanged();
         }
 

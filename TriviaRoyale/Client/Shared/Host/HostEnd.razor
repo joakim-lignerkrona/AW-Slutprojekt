@@ -23,28 +23,28 @@
         </tr>
     </thead>
     <tbody>
-        @for(int i = 0; i < players.Count; i++)
+        @for (int i = 0; i < players.Count; i++)
         {
             var player = players[i];
             <tr>
-            <td>@(i + 1)</td>
-            <td>@player.Name</td>
-            <td>@player.Points</td>
-        </tr>
+                <td>@(i + 1)</td>
+                <td>@player.Name</td>
+                <td>@player.Points</td>
+            </tr>
         }
     </tbody>
 </table>
 
 @* <button class="btn btn-warning p-5" @onclick="ToElimination">
-        <span class="h3">
-            Elimination round!
-        </span>
+    <span class="h3">
+    Elimination round!
+    </span>
     </button>
 
-<button class="btn btn-warning p-5" @onclick="GameEnded">
-        <span class="h3">
-           END GAME!
-        </span>
+    <button class="btn btn-warning p-5" @onclick="GameEnded">
+    <span class="h3">
+    END GAME!
+    </span>
     </button>*@
 <div class="row">
     <div class="d-flex justify-content-around">
@@ -88,7 +88,7 @@
         HttpClient httpClient = new();
 
         var q = await httpClient.GetAsync(url);
-        if(q.IsSuccessStatusCode)
+        if (q.IsSuccessStatusCode)
         {
             // Read the response content
             var content = await q.Content.ReadAsStringAsync();
@@ -98,28 +98,18 @@
             StateHasChanged();
         }
     }
-    void GetHardQuestion()
-    {
-        var index = Random.Shared.Next(0, hardQuestions.Count);
-        hardQuestion = hardQuestions[index];
-        hardQuestions.RemoveAt(index);
-        service.ClearPlayerIsAnswering();
-        StateHasChanged();
-    }
+
     async Task HandleWrongAnswer()
     {
         await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
-        service.ClearPlayerIsAnswering();
     }
     async Task NewGame()
     {
-        service.ClearPlayerIsAnswering();
         await service.hubConnection.InvokeAsync("NewGame");
     }
     async Task HandleCorrectAnswer()
     {
         service.PlayerAnswering.Points = +5;
         await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
-        service.ClearPlayerIsAnswering();
     }
 }

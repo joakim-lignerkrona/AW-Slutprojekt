@@ -48,7 +48,8 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
             question = localQuestions[index];
             localQuestions.RemoveAt(index);
 
-            service.ClearPlayerIsAnswering();
+           
+            service.NewQuestion();
             StateHasChanged();
         }
         async Task GetHardQuestions()
@@ -71,23 +72,23 @@ namespace TriviaRoyale.Client.Shared.Host.QuestionScreen
 
         async Task EndOrEliminate()
         {
-            service.ClearPlayerIsAnswering();
+            
             await service.hubConnection.InvokeAsync("EndGameOrEliminationRound");
         }
         async Task EndGame()
         {
-            service.ClearPlayerIsAnswering();
+            
             await service.hubConnection.InvokeAsync("EndOfGame");
         }
         async Task HandleWrongAnswer()
         {
             await service.hubConnection.InvokeAsync("WrongAnswer", service.PlayerAnswering);
-            service.ClearPlayerIsAnswering();
+            
         }
         async Task HandleCorrectAnswer()
         {
             await service.hubConnection.InvokeAsync("CorrectAnswer", service.PlayerAnswering);
-            service.ClearPlayerIsAnswering();
+            
         }
 
 

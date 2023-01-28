@@ -48,6 +48,10 @@ namespace TriviaRoyale.Shared
 			Players.RemoveAll(p => !p.isActive);
 			Players.ForEach(p => p.Points = 0);
 		}
+		public void NewQuestion()
+		{
+			PlayerAnswering = null;
+		}
 
 		public void PlayerDidAnswer(Player player)
 		{
