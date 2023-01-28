@@ -1,25 +1,39 @@
 ﻿let sounds = []
+var myAudioContext
+let isUsingWebkit = false
 console.log("WebkitSoundPlayer.js loaded")
 if ('webkitAudioContext' in window) {
     console.log("webkitAudioContext found")
-    var myAudioContext = new webkitAudioContext();
+    myAudioContext = new webkitAudioContext();
+    isUsingWebkit = true
 }
 
 function loadSound(Path) {
-    request = new XMLHttpRequest();
-    request.open('GET', path, true);
-    request.responseType = 'arraybuffer';
-    request.addEventListener('load', bufferSound, false);
-    request.send();
+    if (isUsingWebkit) {
+
+        request = new XMLHttpRequest();
+        request.open('GET', Path, true);
+        request.responseType = 'arraybuffer';
+        request.addEventListener('load', event => bufferSound(event, Path), false);
+        request.send();
+    }
 }
 
-function bufferSound(event) {
+function bufferSound(event, Path) {
     console.log(event)
     var request = event.target;
     var source = myAudioContext.createBufferSource();
     source.buffer = myAudioContext.createBuffer(request.response, false);
-    mySource = source;
+    sounds.push({ source, Path });
 }
 
 function playSound(sound) {
+    if (isUsingWebkit) {
+
+        var play = sounds.find(s => s.Path == sound);
+        if (play && myAudioContext) {
+            play.connect(myAudioContext)
+            play.source.noteOn(0);
+        }
+    }
 }
