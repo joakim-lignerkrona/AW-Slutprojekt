@@ -11,12 +11,14 @@ namespace TriviaRoyale.Server.Models
         {
             GameRoom room = new();
             rooms.Add(room);
+            room.OnChange += OnChange;
             NotifyStateChanged();
             return room;
         }
 
         public void RemoveRoom(GameRoom room)
         {
+            room.OnChange -= OnChange;
             rooms.Remove(room);
             NotifyStateChanged();
         }

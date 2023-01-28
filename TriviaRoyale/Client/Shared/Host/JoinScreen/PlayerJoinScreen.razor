@@ -9,10 +9,10 @@
     <div class="row mb-5">
         <div class="d-flex justify-content-between ">
             <div id="QR-output" class="col-6">
-                <a href="@(navigation.BaseUri + $"player/{service.RoomID}")" target="_blank">
+                <a class="d-flex justify-content-center" href="@(navigation.BaseUri + $"player/{service.RoomID}")" target="_blank">
                     @if (service.RoomID != null)
                     {
-                        <img class="img-fluid rounded-3" src="@($"{navigation.BaseUri}qr/"+HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}"))" alt="QRcode with link to game" />
+                        <img class="img-fluid rounded-3" style="max-height: 50vh;" src="@($"{navigation.BaseUri}qr/"+HttpUtility.UrlEncode(navigation.BaseUri + $"player/{service.RoomID}"))" alt="QRcode with link to game" />
                     }
                 </a>
             </div>

@@ -28,7 +28,7 @@ else
 {
 	<h1 class="text-light bg-danger">YOU LOSE </h1>
 	<p class="text-light">You scored: @service.Player.Points</p>
-	<p class="text-light">@players[0].Name won with @players[0].Points points</p>
+	@*<p class="text-light">@players[0].Name won with @players[0].Points points</p>*@
 
 }
 
@@ -57,7 +57,6 @@ else
 </table>
 @code {
 
-	int i = 1;
 
 	List<Player> players;
 
@@ -69,17 +68,17 @@ else
 
 
 
-		if(service.Player.Name == players.First().Name)
-		{
-			winner = true;
-		}
-		else
-			winner = false;
+		//if(service.Player.Name == players.First().Name)
+		//{
+		//	winner = true;
+		//}
+		//else
+			winner = service.Player.Points == players.First().Points;
 
 		StateHasChanged();
 
-		return base.OnInitializedAsync();
 		base.OnInitialized();
+		return base.OnInitializedAsync();
 	}
 
 
