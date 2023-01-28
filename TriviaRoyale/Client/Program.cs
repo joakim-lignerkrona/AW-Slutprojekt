@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
 using TriviaRoyale.Client.Models;
 
 namespace TriviaRoyale.Client
@@ -17,6 +18,7 @@ namespace TriviaRoyale.Client
             builder.Services.AddSingleton<PlayerService>();
 
             builder.Services.AddScoped<ICookie, Cookie>();
+
 
 
             await builder.Build().RunAsync();

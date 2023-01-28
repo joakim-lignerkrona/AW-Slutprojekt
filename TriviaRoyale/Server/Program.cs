@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.ResponseCompression;
-using TriviaRoyale.Client.Models;
 using TriviaRoyale.Server.Hubs;
 using TriviaRoyale.Server.Models;
 
@@ -16,6 +14,7 @@ namespace TriviaRoyale
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddRazorPages();
 
+
 			builder.Services.AddTransient<QRService>();
 
 			builder.Services.AddTransient<QuestionService>();
@@ -27,17 +26,13 @@ namespace TriviaRoyale
 			{
 				options.PayloadSerializerOptions.PropertyNamingPolicy = null;
 			});
-			builder.Services.AddResponseCompression(opts =>
-			{
-				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-					new[] { "application/octet-stream" });
-			});
+
 
 			builder.Services.AddSwaggerGen();
 
 			var app = builder.Build();
 
-			app.UseResponseCompression();
+
 
 			// Configure the HTTP request pipeline.
 			if(app.Environment.IsDevelopment())
