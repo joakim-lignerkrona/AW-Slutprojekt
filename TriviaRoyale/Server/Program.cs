@@ -23,7 +23,10 @@ namespace TriviaRoyale
 
 
 
-            builder.Services.AddSignalR();
+            builder.Services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+            });
             builder.Services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(

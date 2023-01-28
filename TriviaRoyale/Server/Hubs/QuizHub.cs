@@ -127,6 +127,7 @@ namespace TriviaRoyale.Server.Hubs
 
         public async Task PlayerClick(Player player)
         {
+            Console.WriteLine($"{player.Name} wants to answer");
             await Clients.Groups(GetRoomName()).SendAsync("PlayerIsAnswering", player);
             await ChangeStateAsync(GetRoomName(), GameState.PlayerToAnswer);
         }
@@ -178,14 +179,22 @@ namespace TriviaRoyale.Server.Hubs
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            Service.rooms.Find(x => x.Id == GetRoomName()).Players.ForEach(x =>
+            try
             {
-                if(x.SocketID == Context.ConnectionId)
+                Service.rooms.Find(x => x.Id == GetRoomName()).Players.ForEach(x =>
                 {
-                    x.isActive = false;
-                    x.InactiveSince = DateTime.Now;
-                }
-            });
+                    if(x.SocketID == Context.ConnectionId)
+                    {
+                        x.isActive = false;
+                        x.InactiveSince = DateTime.Now;
+                    }
+                });
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("Player not in game left");
+            }
+
             return base.OnDisconnectedAsync(exception);
         }
 
